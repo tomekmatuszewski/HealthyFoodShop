@@ -8,15 +8,20 @@ class StoreWarehouse(object):
 		return self.WarehouseState
 	
 	def add_new_product(self,product,numbers):
-		self.WarehouseState[product.name] = 0
-		self.WarehouseState[product.name] += numbers
+		self.WarehouseState[product] = 0
+		self.WarehouseState[product] += numbers
 		
 	def remove_product(self,product,numbers):
-		if product.name in self.WarehouseState.keys():
-			self.WarehouseState[product.name] -= numbers
+		if product in self.WarehouseState.keys():
+			self.WarehouseState[product] -= numbers
 		else:
-			print("PRODUCT OUT OF STOCK!")
+			raise Exception("PRODUCT OUT OF STOCK!")
+		
+		
+	def __repr__(self):
+		return "Main Warehouse of Healthy Food Shop"
 
 			
-	
+	def Show_Products_InStock(self,product):
+		return "{} {} pcs.".format(product.name,self.WarehouseState[product])
 

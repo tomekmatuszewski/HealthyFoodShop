@@ -6,15 +6,18 @@ class ShoppingList():
 		self.List = {}
 	
 	def add_product(self, product, numbers, magazyn):
-		if product.name in magazyn.WarehouseState.keys():
+		if product not in magazyn.WarehouseState.keys():
+			raise Exception("PRODUCT OUT OF STOCK!")
+		elif numbers > magazyn.WarehouseState[product]:
+			raise Exception("Not enough products on the Shopping List")
+		else:
 			self.List[product] = 0
 			self.List[product] += numbers
-		else:
-			print("PRODUCT OUT OF STOCK!")
+			magazyn.WarehouseState[product] -= numbers
 			
 	def remove_product(self,product,numbers):
 		if numbers > self.List[product]:
-			raise Exception("Not enought products on the Shopping List")
+			raise Exception("Not enough products on the Shopping List")
 		else:
 			self.List[product] -= numbers
 			
@@ -29,4 +32,14 @@ class ShoppingList():
 		for k, v in self.List.items():
 			List_view += "{}----{}pcs.----{}$\n".format(k.name,v,v*k.price)
 		return List_view
+	
+	def __getitem__(self, key):
+		return list(self.List.keys())[key]
+	
+	def __len__(self):
+		return len(list(self.List.keys()))
+	
+	
+		
+	
 		
