@@ -2,7 +2,7 @@ from ShoppingList.utils import get_calories
 class ShoppingItem:
 	
 	def __init__(self,name,price,nutri_per_100,weight):
-		self.name = name
+		self.name= name
 		self.price = price
 		self.nutri_per_100 = nutri_per_100
 		self.weight = weight
