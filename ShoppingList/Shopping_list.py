@@ -1,19 +1,20 @@
 from datetime import datetime
+from ShoppingList.Store_Warehouse import MainWarehouse
 class ShoppingList():
 	def __init__(self, number):
 		self.number = number
 		self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 		self.List = {}
 	
-	def add_product(self, product, numbers, magazyn):
-		if product not in magazyn.WarehouseState.keys():
+	def add_product(self, product, numbers):
+		if product.name not in MainWarehouse.WarehouseState.keys():
 			raise Exception("PRODUCT OUT OF STOCK!")
-		elif numbers > magazyn.WarehouseState[product]:
+		elif numbers > MainWarehouse.WarehouseState[product.name]:
 			raise Exception("Not enough products on the Shopping List")
 		else:
 			self.List[product] = 0
 			self.List[product] += numbers
-			magazyn.WarehouseState[product] -= numbers
+			MainWarehouse.WarehouseState[product.name] -= numbers
 			
 	def remove_product(self,product,numbers):
 		if numbers > self.List[product]:

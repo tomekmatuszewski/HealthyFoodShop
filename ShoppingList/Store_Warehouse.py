@@ -25,3 +25,7 @@ class StoreWarehouse(object):
 	def Show_Products_InStock(self,product):
 		return "{} {} pcs.".format(product.name,self.WarehouseState[product])
 
+
+
+# creating Main Warehouse for Healthy Food Shop !!!!
+MainWarehouse = StoreWarehouse("Healthy Food Shop Warehouse")

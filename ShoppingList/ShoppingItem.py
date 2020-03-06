@@ -1,12 +1,12 @@
 from ShoppingList.utils import get_calories
 class ShoppingItem:
 	
-	def __init__(self,name,price,nutri_per_100,weight):
+	def __init__(self,name,price,nutri_per_100,weight,calories):
 		self.name= name
 		self.price = price
 		self.nutri_per_100 = nutri_per_100
 		self.weight = weight
-		self.calories = round(get_calories(nutri_per_100,weight),0)
+		self.calories = calories
 		
 	def get_name(self):
 		return self.name
@@ -22,4 +22,10 @@ class ShoppingItem:
 	
 	def __lt__(self, other):
 		return self.calories < other.calories
+	
+	def __hash__(self):
+		return int(len(self.name) + self.price + self.calories)
+	
+	def __eq__(self, other):
+		return hash(self) == hash(other)
 	
