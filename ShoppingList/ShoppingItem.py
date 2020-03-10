@@ -25,7 +25,7 @@ class ShoppingItem:
 	
 	def __hash__(self):
 		return int(len(self.name) + self.price + self.calories)
-	
+
 	def __eq__(self, other):
 		return hash(self) == hash(other)
 	
