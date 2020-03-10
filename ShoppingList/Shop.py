@@ -41,15 +41,20 @@ class ShoppingList(ShopWarehouse):
 			print("Products on Stock: {}, {} psc.".format(product.name,self.Warehouse[product.name],))
 			raise Exception("Not enough products in stock!")
 		else:
-			self.List[product] = 0
-			self.List[product] += numbers
-			self.Warehouse[product.name] -= numbers
+			if product not in self.List:
+				self.List[product] = 0
+				self.List[product] += numbers
+				self.Warehouse[product.name] -= numbers
+			else:
+				self.List[product] += numbers
+				self.Warehouse[product.name] -= numbers
 			
 	def remove_product(self,product,numbers):
 		if numbers > self.List[product]:
 			raise Exception("Not enough products in stock!")
 		else:
 			self.List[product] -= numbers
+			self.Warehouse[product.name] += numbers
 			if self.List[product] <= 0:
 				del self.List[product]
 			

@@ -19,16 +19,24 @@ new_Shopping_Cart = ShoppingList(1)
 
 while True:
 	index_number = int(input('Select number of product from list: '))
-	number_of_products = int(input("Select quantity of prodcuts: "))
+	number_of_products = int(input("Select quantity of products: "))
 	item = ShoppingItem(food.loc[index_number,"Product"],food.loc[index_number,"Price"],
 	                    {"Protein(g)": food.loc[index_number,"Protein(g)"],"Fats(g)": food.loc[index_number,"Fats(g)"],"Carbo(g)": food.loc[index_number,"Carbo(g)"]},
 	                    food.loc[index_number,"Weight[kg]"],food.loc[index_number,"Kcal"])
 	new_Shopping_Cart.add_product(item,number_of_products)
 	print("Item added to Shopping Cart")
-	next_step = input("Do you want to continue [y/n]: ")
-	if next_step == 'y':
+	view_of_chart = input("Do you want to view the contents of the basket [y/n]:")
+	if view_of_chart == 'y':
+		print(new_Shopping_Cart.Show_Shopping_list())
+	action = input("Select next action [continue :(C), remove :(R) end (E)]: ")
+	if action == 'C':
 		continue
-	else:
+	elif action == 'R':
+		quantity = int(input("How many products do you want to remove: "))
+		print(new_Shopping_Cart.Show_Shopping_list())
+		product = int(input("Select position from Shopping List: "))
+		new_Shopping_Cart.remove_product(new_Shopping_Cart[product],quantity)
+	elif action == 'E':
 		print(new_Shopping_Cart.Show_Shopping_list())
 		print(new_Shopping_Cart.check_total_cost())
 		break
