@@ -17,6 +17,9 @@ class ShoppingItem:
 	def get_nutritional_values(self):
 		return self.nutri_per_100
 	
+	def get_calories(self):
+		return self.calories
+	
 	def __str__(self):
 		return self.name
 	

@@ -25,36 +25,44 @@ while True:
 	                    food.loc[index_number,"Weight[kg]"],food.loc[index_number,"Kcal"])
 	new_Shopping_Cart.add_product(item,number_of_products)
 	print("Item added to Shopping Cart")
-	view_of_chart = input("Do you want to view the contents of the basket [y/n]:")
-	if view_of_chart == 'y':
-		print(new_Shopping_Cart.Show_Shopping_list())
-	action = input("Select next action [continue :(C), remove :(R) end (E)]: ")
+	view_of_chart = input("Do you want to view the contents of the basket [Y/N]:")
+	if view_of_chart == 'Y':
+		new_Shopping_Cart.Show_Shopping_list()
+	action = input("Select next action [continue :(C), remove item from Shopping Chart:(R), Finish Shopping (F)]: ")
 	if action == 'C':
 		continue
 	elif action == 'R':
 		quantity = int(input("How many products do you want to remove: "))
-		print(new_Shopping_Cart.Show_Shopping_list())
+		new_Shopping_Cart.Show_Shopping_list()
 		product = int(input("Select position from Shopping List: "))
-		new_Shopping_Cart.remove_product(new_Shopping_Cart[product],quantity)
-	elif action == 'E':
-		print(new_Shopping_Cart.Show_Shopping_list())
+		new_Shopping_Cart.remove_product(new_Shopping_Cart[product-1],quantity)
+		new_Shopping_Cart.Show_Shopping_list()
+		continue
+		# action = input("Select next action [continue :(C), remove item from Shopping Chart:(R), Finish Shopping (F),]: ")
+		# if action == 'C':
+		# 	continue
+		# elif action == 'F':
+		# 	new_Shopping_Cart.Show_Shopping_list()
+		# 	print(new_Shopping_Cart.check_total_cost())
+		# 	break
+		# else:
+		# 	raise Exception("Wrong command!")
+	elif action == 'F':
+		print("*" * 150)
+		new_Shopping_Cart.Show_Shopping_list()
+		print("*" * 150)
 		print(new_Shopping_Cart.check_total_cost())
+		print("Nutritional values of products in the basket per 100g / Calories per 100 g ")
+		for product in new_Shopping_Cart.List:
+			print("{} - {} - {} kcal".format(product.name,product.get_nutritional_values(),product.get_calories()))
+		print(new_Shopping_Cart.check_total_calories())
 		break
+	else:
+		raise Exception("Wrong command!")
 	
 	
 	
-	
-	
-	# print(item.nutri_per_100)
-	# print(item.name)
-	# print(item.calories, ' kcal per 100 g')
-	# print(item.price)
-	# new_Shopping_Cart.add_product(item, 5)
-	# print(new_Shopping_Cart[0])
-	# print(new_Shopping_Cart.check_total_cost())
-	# print(new_Shopping_Cart.Show_Shopping_list())
-	# break
-	
+print("*"*150)
 print(MainWarehouse.Warehouse)
 
 

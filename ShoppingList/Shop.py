@@ -62,13 +62,29 @@ class ShoppingList(ShopWarehouse):
 		total_bill = 0
 		for k,v in self.List.items():
 			total_bill += k.price * v
-		return "Total bill cost : " + str(total_bill) + "$"
+		return "TOTAL BILL COST : " + str(total_bill) + "$"
 	
 	def Show_Shopping_list(self):
 		List_view = ""
-		for k, v in self.List.items():
-			List_view += "{}----{}pcs.----{}$\n".format(k.name,v,v*k.price)
-		return List_view
+		counter = 1
+		print("-"*65)
+		for k,v in self.List.items():
+			if counter == len(self.List.keys()):
+				List_view += "|{:2}: {:45s}{:3} pcs. {:5}$|".format(counter,k.name,v,v*k.price)
+			else:
+				List_view += "|{:2}: {:45s}{:3} pcs. {:5}$|\n".format(counter, k.name, v, v * k.price)
+				counter += 1
+		print(List_view)
+		print("-" * 65)
+		
+	
+	def check_total_calories(self):
+		total_kcal = 0
+		for k,v in self.List.items():
+			total_kcal += k.calories * v
+		return "TOTAL CALORIES IN CHART : " + str(total_kcal) + "kcal"
+	
+	
 	
 	def __getitem__(self, key):
 		return list(self.List.keys())[key]
