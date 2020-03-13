@@ -6,9 +6,9 @@ from ShoppingList.Database_food import food
 MainWarehouse = ShopWarehouse("Healthy Food Shop Warehouse")
 
 # creating Items for Healthy Food Shop !!!!
-for i in range(641):
-	item = ShoppingItem(food.loc[i, "Product"], food.loc[i, "Price"],{"Protein(g)": food.loc[i, "Protein(g)"],"Fats(g)": food.loc[i, "Fats(g)"], "Carbo(g)": food.loc[i, "Carbo(g)"]},
-	                    food.loc[i, "Weight[kg]"], food.loc[i, "Kcal"])
+for i in range(351):
+	item = ShoppingItem(food.loc[i, "Product"], food.loc[i, "Price[PLN]"],{"Protein(g)": food.loc[i, "Protein(g)"],"Fats(g)": food.loc[i, "Fats(g)"], "Carbo(g)": food.loc[i, "Carbo(g)"]},
+	                    food.loc[i, "Weight[g/ml]"], food.loc[i, "Kcal"], food.loc[i,"unit"])
 
 	MainWarehouse.Warehouse[item.name] = 100
 
@@ -20,9 +20,9 @@ new_Shopping_Cart = ShoppingList(1)
 while True:
 	index_number = int(input('Select number of product from list: '))
 	number_of_products = float(input("Select quantity of products: "))
-	item = ShoppingItem(food.loc[index_number,"Product"],food.loc[index_number,"Price"],
+	item = ShoppingItem(food.loc[index_number,"Product"],food.loc[index_number,"Price[PLN]"],
 	                    {"Protein(g)": food.loc[index_number,"Protein(g)"],"Fats(g)": food.loc[index_number,"Fats(g)"],"Carbo(g)": food.loc[index_number,"Carbo(g)"]},
-	                    food.loc[index_number,"Weight[kg]"],food.loc[index_number,"Kcal"])
+	                    food.loc[index_number,"Weight[g/ml]"],food.loc[index_number,"Kcal"],food.loc[i,"unit"])
 	new_Shopping_Cart.add_product(item,number_of_products)
 	print("Item added to Shopping Cart")
 	view_of_chart = input("Do you want to view the contents of the basket [Y/N]:")
