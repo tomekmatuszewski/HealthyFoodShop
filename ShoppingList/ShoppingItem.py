@@ -1,13 +1,13 @@
 from ShoppingList.utils import get_calories
 class ShoppingItem:
 	
-	def __init__(self,name,price,nutri_per_100,weight,calories,item):
+	def __init__(self,name,price,nutri_per_100,weight,calories,unit):
 		self.name= name
 		self.price = price
 		self.nutri_per_100 = nutri_per_100
 		self.weight = weight
 		self.calories = calories
-		self.item = item
+		self.unit = unit
 		
 	def get_name(self):
 		return self.name

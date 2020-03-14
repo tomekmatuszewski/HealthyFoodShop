@@ -25,7 +25,7 @@ class ShopWarehouse(object):
 		return "Main Warehouse of Healthy Food Shop"
 	
 	def Show_Products_InStock(self, product):
-		return "{} {} pcs.".format(product.name, self.Warehouse[product])
+		return "{} {} {}".format(product.name, self.Warehouse[product], product.unit)
 
 
 class ShoppingList(ShopWarehouse):
@@ -38,7 +38,7 @@ class ShoppingList(ShopWarehouse):
 		if product.name not in self.Warehouse.keys():
 			raise Exception("PRODUCT OUT OF STOCK!")
 		elif numbers > self.Warehouse[product.name]:
-			print("Products on Stock: {}, {} psc.".format(product.name,self.Warehouse[product.name],))
+			print("Products on Stock: {}, {} {}".format(product.name,self.Warehouse[product.name],product.unit))
 			raise Exception("Not enough products in stock!")
 		else:
 			if product not in self.List:
@@ -62,27 +62,30 @@ class ShoppingList(ShopWarehouse):
 		total_bill = 0
 		for k,v in self.List.items():
 			total_bill += k.price * v
-		return "TOTAL BILL COST : " + str(total_bill) + "$"
+		return "TOTAL BILL COST : " + str(round(total_bill,2)) + " PLN"
 	
 	def Show_Shopping_list(self):
 		List_view = ""
 		counter = 1
-		print("-"*65)
+		print("-"*68)
 		for k,v in self.List.items():
 			if counter == len(self.List.keys()):
-				List_view += "|{:2}: {:45s}{:3} pcs. {:5}$|".format(counter,k.name,v,v*k.price)
+				List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|".format(counter,k.name,v,k.unit,round(v*k.price,2))
 			else:
-				List_view += "|{:2}: {:45s}{:3} pcs. {:5}$|\n".format(counter, k.name, v, v * k.price)
+				List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v,k.unit, round(v * k.price,2))
 				counter += 1
 		print(List_view)
-		print("-" * 65)
+		print("-" * 68)
 		
 	
 	def check_total_calories(self):
 		total_kcal = 0
 		for k,v in self.List.items():
-			total_kcal += k.calories * v
-		return "TOTAL CALORIES IN CHART : " + str(total_kcal) + "kcal"
+			if k.unit == 'kg':
+				total_kcal += k.calories * v * 10
+			else:
+				total_kcal += k.calories * v * k.weight/100
+		return "TOTAL CALORIES IN CHART : " + str(round(total_kcal,1)) + "kcal"
 	
 	
 	
