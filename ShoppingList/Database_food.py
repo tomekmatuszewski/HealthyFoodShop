@@ -12,4 +12,3 @@ food = food.set_index(["Category","Number"]).sort_index()
 
 
 
-

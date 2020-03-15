@@ -30,8 +30,14 @@ while True:
 	for item in range(len(categories)):
 		print("{}: {}".format(item+1,categories[item]))
 	category = int(input("Select categories [1-22]: "))
+	if type(category) is not int:
+		print("Select right number from list of products")
+		continue
 	print(food.loc[categories[category-1]].loc[:, ["Product","Price[PLN]"]])
 	index_number = int(input('Select number of product from list above: '))
+	if type(index_number) is not int:
+		print("Select right number from list of products")
+		continue
 	item = ShoppingItem(food.loc[(categories[category-1],index_number), "Product"], food.loc[(categories[category-1],index_number), "Price[PLN]"],
 	                    {"Protein(g)": food.loc[(categories[category-1],index_number), "Protein(g)"],
 	                     "Fats(g)": food.loc[(categories[category-1],index_number), "Fats(g)"], "Carbo(g)": food.loc[(categories[category-1],index_number), "Carbo(g)"]},
@@ -49,8 +55,16 @@ while True:
 	elif action == 'R':
 		while True:
 			new_Shopping_Cart.Show_Shopping_list()
-			product = int(input("Select position from Shopping List: "))
+			product = int(input("Select position from Shopping List [select 0 to Undo]: "))
+			if product == 0:
+				break
 			quantity = float(input("How many products do you want to remove: "))
+			if type(product) is not int:
+				print("Select right number from list of products")
+				continue
+			elif type(quantity) is not int or type(quantity) is not float:
+				print("Select right quantity!")
+				continue
 			new_Shopping_Cart.remove_product(new_Shopping_Cart[product-1],quantity)
 			new_Shopping_Cart.Show_Shopping_list()
 			if len(new_Shopping_Cart) == 0:
