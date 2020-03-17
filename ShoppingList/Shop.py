@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 
 
 class ShopWarehouse(object):
@@ -29,9 +30,8 @@ class ShopWarehouse(object):
 
 
 class ShoppingList(ShopWarehouse):
-	def __init__(self, number):
-		self.number = number
-		self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	def __init__(self):
+		self.date = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 		self.List = {}
 	
 	def add_product(self, product, numbers):
@@ -75,9 +75,15 @@ class ShoppingList(ShopWarehouse):
 				List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v,k.unit, round(v * k.price,2))
 				counter += 1
 		print(List_view)
+		total_bill = 0
+		for k, v in self.List.items():
+			total_bill += k.price * v
 		print("-" * 68)
-		
-	
+		print("{:>59}{} PLN|".format("|TOTAL BILL COST : ",round(total_bill, 2)))
+		print("{:>68}".format("-" * 28))
+
+
+
 	def check_total_calories(self):
 		total_kcal = 0
 		for k,v in self.List.items():
@@ -94,7 +100,31 @@ class ShoppingList(ShopWarehouse):
 	
 	def __len__(self):
 		return len(list(self.List.keys()))
+	
+	
+	def Print_Bill(self):
+		file_path = r"ShoppingList\Bills\Bill_{}.txt".format(datetime.now().strftime("%Y_%m_%d_%H-%M-%S"))
+		with open(file_path,'a+') as file:
+			List_view = ""
+			counter = 1
+			file.write("*HEALTHY FOOD SHOP COMPANY*\n")
+			file.write("Total receipt:\n")
+			file.write("{}\n".format("-" * 68))
+			for k, v in self.List.items():
+				if counter == len(self.List.keys()):
+					List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v, k.unit,
+					                                                       round(v * k.price, 2))
+				else:
+					List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v, k.unit,
+					                                                         round(v * k.price, 2))
+					counter += 1
+			file.write(List_view)
+			total_bill = 0
+			for k, v in self.List.items():
+				total_bill += k.price * v
+			file.write("{}\n".format("-" * 68))
+			file.write("{:>59}{} PLN|\n".format("|TOTAL BILL COST : ", round(total_bill, 2)))
+			file.write("{:>68}\n".format("-" * 28))
+			file.write("Thank you for shopping! :)")
 
 
-
-		
