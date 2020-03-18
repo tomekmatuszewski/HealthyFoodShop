@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-
+import json
 
 class ShopWarehouse(object):
 	
@@ -67,20 +67,20 @@ class ShoppingList(ShopWarehouse):
 	def Show_Shopping_list(self):
 		List_view = ""
 		counter = 1
-		print("-"*68)
+		print("-"*72)
 		for k,v in self.List.items():
 			if counter == len(self.List.keys()):
-				List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|".format(counter,k.name,v,k.unit,round(v*k.price,2))
+				List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|".format(str(counter),k.name,str(v),k.unit,str(round(v*k.price,2)))
 			else:
-				List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v,k.unit, round(v * k.price,2))
+				List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|\n".format(str(counter), k.name, str(v),k.unit, str(round(v * k.price,2)))
 				counter += 1
 		print(List_view)
 		total_bill = 0
 		for k, v in self.List.items():
 			total_bill += k.price * v
-		print("-" * 68)
-		print("{:>59}{} PLN|".format("|TOTAL BILL COST : ",round(total_bill, 2)))
-		print("{:>68}".format("-" * 28))
+		print("-" * 72)
+		print("{:>62}{:>6} PLN|".format("|TOTAL BILL COST : ",str(round(total_bill, 2))))
+		print("{:>72}".format("-" * 30))
 
 
 
@@ -91,7 +91,7 @@ class ShoppingList(ShopWarehouse):
 				total_kcal += k.calories * v * 10
 			else:
 				total_kcal += k.calories * v * k.weight/100
-		return "TOTAL CALORIES IN CHART : " + str(round(total_kcal,1)) + "kcal"
+		return "TOTAL CALORIES IN CHART : " + str(round(total_kcal,1)) + " kcal"
 	
 	
 	
@@ -109,22 +109,29 @@ class ShoppingList(ShopWarehouse):
 			counter = 1
 			file.write("*HEALTHY FOOD SHOP COMPANY*\n")
 			file.write("Total receipt:\n")
-			file.write("{}\n".format("-" * 68))
+			file.write("{}\n".format("-" * 72))
 			for k, v in self.List.items():
 				if counter == len(self.List.keys()):
-					List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v, k.unit,
-					                                                       round(v * k.price, 2))
+					List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|\n".format(str(counter), k.name, str(v), k.unit,
+					                                                       str(round(v * k.price, 2)))
 				else:
-					List_view += "|{:2}: {:45s}{:3} {:3} {:5} PLN|\n".format(counter, k.name, v, k.unit,
-					                                                         round(v * k.price, 2))
+					List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|\n".format(str(counter), k.name, str(v), k.unit,
+					                                                         str(round(v * k.price, 2)))
 					counter += 1
 			file.write(List_view)
 			total_bill = 0
 			for k, v in self.List.items():
 				total_bill += k.price * v
-			file.write("{}\n".format("-" * 68))
-			file.write("{:>59}{} PLN|\n".format("|TOTAL BILL COST : ", round(total_bill, 2)))
-			file.write("{:>68}\n".format("-" * 28))
-			file.write("Thank you for shopping! :)")
-
+			file.write("{}\n".format("-" * 72))
+			file.write("{:>62}{:>6} PLN|\n".format("|TOTAL BILL COST : ", str(round(total_bill, 2))))
+			file.write("{:>72}\n\n".format("-" * 30))
+			file.write("Nutritional values of products in the basket per 100g / Calories per 100 g: \n\n")
+			file.write("{}\n".format("-" * 118))
+			for product in self.List.keys():
+				file.write("|{:40} - {:55} - {:10} kcal|\n".format(product.name, json.dumps(product.get_nutritional_values()),
+				                                          product.get_calories()))
+			file.write("{:>118}\n".format("-" * 39))
+			file.write("{:>117}\n".format(self.check_total_calories()))
+			file.write("{}\n".format("-" * 118))
+			file.write("Thank you for shopping and welcome again ! :)")
 
