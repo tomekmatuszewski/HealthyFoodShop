@@ -50,13 +50,15 @@ class ShoppingList(ShopWarehouse):
 				self.Warehouse[product.name] -= numbers
 			
 	def remove_product(self,product,numbers):
-		if numbers > self.List[product]:
-			raise Exception("Not enough products in stock!")
-		else:
-			self.List[product] -= numbers
-			self.Warehouse[product.name] += numbers
-			if self.List[product] <= 0:
-				del self.List[product]
+		self.List[product] -= numbers
+		self.Warehouse[product.name] += numbers
+		if self.List[product] <= 0:
+			del self.List[product]
+	
+	def increase_number_product(self,product,numbers):
+		self.List[product] += numbers
+		self.Warehouse[product.name] -= numbers
+			
 			
 	def check_total_cost(self):
 		total_bill = 0
@@ -91,9 +93,17 @@ class ShoppingList(ShopWarehouse):
 				total_kcal += k.calories * v * 10
 			else:
 				total_kcal += k.calories * v * k.weight/100
-		return "TOTAL CALORIES IN CHART : " + str(round(total_kcal,1)) + " kcal"
+		return "{:>118}".format('|TOTAL CALORIES IN CHART : ' + str(round(total_kcal,1)) +  " kcal|")
 	
-	
+	def get_nutritional_raport(self):
+		print("Nutritional values of products in the basket per 100g / Calories per 100 g:")
+		print("{}".format("-" * 118))
+		for product in self.List:
+			print("|{:40} - {:55} - {:10} kcal|".format(product.name, json.dumps(product.get_nutritional_values()),
+			                                            product.get_calories()))
+		print("{}".format("-" * 118))
+		print(self.check_total_calories())
+		print("{:>118}\n".format("-" * 39))
 	
 	def __getitem__(self, key):
 		return list(self.List.keys())[key]
@@ -130,8 +140,8 @@ class ShoppingList(ShopWarehouse):
 			for product in self.List.keys():
 				file.write("|{:40} - {:55} - {:10} kcal|\n".format(product.name, json.dumps(product.get_nutritional_values()),
 				                                          product.get_calories()))
-			file.write("{:>118}\n".format("-" * 39))
-			file.write("{:>117}\n".format(self.check_total_calories()))
 			file.write("{}\n".format("-" * 118))
+			file.write("{:>118}\n".format(self.check_total_calories()))
+			file.write("{:>118}\n".format("-" * 39))
 			file.write("Thank you for shopping and welcome again ! :)")
 

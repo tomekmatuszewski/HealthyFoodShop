@@ -45,7 +45,7 @@ while True:
 	view_of_chart = input("Do you want to view the contents of the basket [Y/N]:")
 	if view_of_chart == 'Y':
 		new_Shopping_Cart.Show_Shopping_list()
-	action = input("Select next action [continue :(C), remove item from Shopping Chart:(R), Finish Shopping (F)]: ")
+	action = input("Select next action [Continue :(C), Add (increase number for item): (A), Remove :(R), Finish (F)]: ")
 	if action == 'C':
 		continue
 	elif action == 'R':
@@ -55,6 +55,9 @@ while True:
 			if product == 0:
 				break
 			quantity = float(input("How many products do you want to remove: "))
+			if quantity > new_Shopping_Cart.List[new_Shopping_Cart[product-1]]:
+				print("Number of products in the basket is less! Choose the correct number")
+				continue
 			new_Shopping_Cart.remove_product(new_Shopping_Cart[product-1],quantity)
 			new_Shopping_Cart.Show_Shopping_list()
 			if len(new_Shopping_Cart) == 0:
@@ -76,12 +79,39 @@ while True:
 			print("*" * 150)
 			new_Shopping_Cart.Show_Shopping_list()
 			print("*" * 150)
-			print(new_Shopping_Cart.check_total_cost())
-			print("Nutritional values of products in the basket per 100g / Calories per 100 g ")
-			for product in new_Shopping_Cart.List:
-				print("{} - {} - {} kcal".format(product.name, product.get_nutritional_values(),
-				                                 product.get_calories()))
-			print(new_Shopping_Cart.check_total_calories())
+			new_Shopping_Cart.get_nutritional_raport()
+			break
+		else:
+			print("Wrong command!")
+			continue
+	elif action == "A":
+		while True:
+			new_Shopping_Cart.Show_Shopping_list()
+			product = int(input("Select position from Shopping List [select 0 to Undo]: "))
+			if product == 0:
+				break
+			quantity = float(input("How many products do you want to add: "))
+			if quantity > new_Shopping_Cart.Warehouse[new_Shopping_Cart[product - 1].name]:
+				print("Not enough products in stock!")
+				continue
+			new_Shopping_Cart.increase_number_product(new_Shopping_Cart[product - 1], quantity)
+			new_Shopping_Cart.Show_Shopping_list()
+			add_next = input("Do you want to add next item :( [Y/N]: ")
+			if add_next == "Y":
+				continue
+			if add_next == "N":
+				break
+			else:
+				print("Wrong command!")
+				continue
+		continue_shopping = input("Do you want to continue shopping [Y/N]: ")
+		if continue_shopping == "Y":
+			continue
+		elif continue_shopping == "N":
+			print("*" * 150)
+			new_Shopping_Cart.Show_Shopping_list()
+			print("*" * 150)
+			new_Shopping_Cart.get_nutritional_raport()
 			break
 		else:
 			print("Wrong command!")
@@ -90,10 +120,7 @@ while True:
 		print("*" * 150)
 		new_Shopping_Cart.Show_Shopping_list()
 		print("*" * 150)
-		print("Nutritional values of products in the basket per 100g / Calories per 100 g: ")
-		for product in new_Shopping_Cart.List:
-			print("{:40} - {:55} - {:10} kcal".format(product.name,json.dumps(product.get_nutritional_values()),product.get_calories()))
-		print(new_Shopping_Cart.check_total_calories())
+		new_Shopping_Cart.get_nutritional_raport()
 		break
 	else:
 		print("Wrong command!")
