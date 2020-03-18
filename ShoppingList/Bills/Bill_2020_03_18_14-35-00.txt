@@ -1,0 +1,24 @@
+*HEALTHY FOOD SHOP COMPANY*
+Total receipt:
+------------------------------------------------------------------------
+|1 : Mleko spo¿ywcze 3,5 %                         1.00 szt :  3.30 PLN|
+|2 : Indyk, skrzyd³o                               1.00 kg  : 20.00 PLN|
+|3 : Chipsy Bio Kokosowe                           1.00 szt : 10.00 PLN|
+|4 : Morszczuk œwie¿y                              1.00 kg  : 26.00 PLN|
+|5 : Wo³owina, polêdwica                           1.00 kg  : 42.00 PLN|
+------------------------------------------------------------------------
+                                          |TOTAL BILL COST : 101.30 PLN|
+                                          ------------------------------
+
+Nutritional values of products in the basket per 100g / Calories per 100 g: 
+
+----------------------------------------------------------------------------------------------------------------------
+|Mleko spo¿ywcze 3,5 %                    - {"Protein(g)": 3.3, "Fats(g)": 3.5, "Carbo(g)": 4.8}    -       64.0 kcal|
+|Indyk, skrzyd³o                          - {"Protein(g)": 16.5, "Fats(g)": 11.4, "Carbo(g)": 0.0}  -      168.0 kcal|
+|Chipsy Bio Kokosowe                      - {"Protein(g)": 6.9, "Fats(g)": 64.0, "Carbo(g)": 8.4}   -      669.0 kcal|
+|Morszczuk œwie¿y                         - {"Protein(g)": 17.2, "Fats(g)": 2.2, "Carbo(g)": 0.0}   -       89.0 kcal|
+|Wo³owina, polêdwica                      - {"Protein(g)": 20.1, "Fats(g)": 3.5, "Carbo(g)": 0.0}   -      113.0 kcal|
+                                                                               ---------------------------------------
+                                                                                TOTAL CALORIES IN CHART : 4875.2 kcal
+----------------------------------------------------------------------------------------------------------------------
+Thank you for shopping and welcome again ! :)

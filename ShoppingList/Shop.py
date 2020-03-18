@@ -70,16 +70,16 @@ class ShoppingList(ShopWarehouse):
 		print("-"*72)
 		for k,v in self.List.items():
 			if counter == len(self.List.keys()):
-				List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|".format(str(counter),k.name,str(v),k.unit,str(round(v*k.price,2)))
+				List_view += "|{:2}: {:45s}{:5.2f} {:3} : {:5.2f} PLN|".format(str(counter),k.name,v,k.unit,round(v*k.price,2))
 			else:
-				List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|\n".format(str(counter), k.name, str(v),k.unit, str(round(v * k.price,2)))
+				List_view += "|{:2}: {:45s}{:5.2f} {:3} : {:5.2f} PLN|\n".format(str(counter), k.name, v,k.unit, round(v * k.price,2))
 				counter += 1
 		print(List_view)
 		total_bill = 0
 		for k, v in self.List.items():
 			total_bill += k.price * v
 		print("-" * 72)
-		print("{:>62}{:>6} PLN|".format("|TOTAL BILL COST : ",str(round(total_bill, 2))))
+		print("{:>61}{:6.2f} PLN|".format("|TOTAL BILL COST : ",round(total_bill, 2)))
 		print("{:>72}".format("-" * 30))
 
 
@@ -112,18 +112,18 @@ class ShoppingList(ShopWarehouse):
 			file.write("{}\n".format("-" * 72))
 			for k, v in self.List.items():
 				if counter == len(self.List.keys()):
-					List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|\n".format(str(counter), k.name, str(v), k.unit,
-					                                                       str(round(v * k.price, 2)))
+					List_view += "|{:2}: {:45s}{:>5.2f} {:3} : {:>5.2f} PLN|\n".format(str(counter), k.name, v, k.unit,
+					                                                       round(v * k.price, 2))
 				else:
-					List_view += "|{:2}: {:45s}{:>5} {:3} : {:>5} PLN|\n".format(str(counter), k.name, str(v), k.unit,
-					                                                         str(round(v * k.price, 2)))
+					List_view += "|{:2}: {:45s}{:>5.2f} {:3} : {:>5.2f} PLN|\n".format(str(counter), k.name, v, k.unit,
+					                                                         round(v * k.price, 2))
 					counter += 1
 			file.write(List_view)
 			total_bill = 0
 			for k, v in self.List.items():
 				total_bill += k.price * v
 			file.write("{}\n".format("-" * 72))
-			file.write("{:>62}{:>6} PLN|\n".format("|TOTAL BILL COST : ", str(round(total_bill, 2))))
+			file.write("{:>61}{:>6.2f} PLN|\n".format("|TOTAL BILL COST : ", round(total_bill, 2)))
 			file.write("{:>72}\n\n".format("-" * 30))
 			file.write("Nutritional values of products in the basket per 100g / Calories per 100 g: \n\n")
 			file.write("{}\n".format("-" * 118))
