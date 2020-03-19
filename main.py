@@ -30,9 +30,15 @@ while True:
 	for item in range(len(categories)):
 		print("{}: {}".format(item+1,categories[item]))
 	category = int(input("Select categories [1-22]: "))
+	if category > len(categories):
+		print("Wrong number!")
+		continue
 	print(food.loc[categories[category-1]].loc[:, ["Product","Price[PLN]"]])
-	index_number = int(input('Select number of product from list above [select 0 to undo]: '))
+	index_number = int(input('Select number of product from list above [select "0" to undo]: '))
 	if index_number == 0:
+		continue
+	elif index_number > len(food.loc[categories[category-1]].loc[:, ["Product","Price[PLN]"]]):
+		print("Wrong number!")
 		continue
 	item = ShoppingItem(food.loc[(categories[category-1],index_number), "Product"], food.loc[(categories[category-1],index_number), "Price[PLN]"],
 	                    {"Protein(g)": food.loc[(categories[category-1],index_number), "Protein(g)"],
@@ -54,6 +60,9 @@ while True:
 			product = int(input("Select position from Shopping List [select 0 to Undo]: "))
 			if product == 0:
 				break
+			elif product > len(new_Shopping_Cart):
+				print("Wrong number!")
+				continue
 			quantity = float(input("How many products do you want to remove: "))
 			if quantity > new_Shopping_Cart.List[new_Shopping_Cart[product-1]]:
 				print("Number of products in the basket is less! Choose the correct number")
@@ -90,6 +99,9 @@ while True:
 			product = int(input("Select position from Shopping List [select 0 to Undo]: "))
 			if product == 0:
 				break
+			elif product > len(new_Shopping_Cart):
+				print("Wrong number!")
+				continue
 			quantity = float(input("How many products do you want to add: "))
 			if quantity > new_Shopping_Cart.Warehouse[new_Shopping_Cart[product - 1].name]:
 				print("Not enough products in stock!")

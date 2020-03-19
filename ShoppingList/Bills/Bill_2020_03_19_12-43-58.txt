@@ -1,0 +1,20 @@
+*HEALTHY FOOD SHOP COMPANY*
+Total receipt:
+------------------------------------------------------------------------
+|1 : Kakao w proszku 16 %                          2.00 szt : 10.00 PLN|
+|2 : Szynka surowa wieprzowa                       0.80 kg  : 20.00 PLN|
+|3 : Olej kukurydziany                             1.00 szt :  5.90 PLN|
+------------------------------------------------------------------------
+                                          |TOTAL BILL COST :  35.90 PLN|
+                                          ------------------------------
+
+Nutritional values of products in the basket per 100g / Calories per 100 g: 
+
+----------------------------------------------------------------------------------------------------------------------
+|Kakao w proszku 16 %                     - {"Protein(g)": 18.2, "Fats(g)": 21.7, "Carbo(g)": 50.6} -      448.0 kcal|
+|Szynka surowa wieprzowa                  - {"Protein(g)": 18.0, "Fats(g)": 21.3, "Carbo(g)": 0.0}  -      264.0 kcal|
+|Olej kukurydziany                        - {"Protein(g)": 0.0, "Fats(g)": 100.0, "Carbo(g)": 0.0}  -      900.0 kcal|
+----------------------------------------------------------------------------------------------------------------------
+                                                                              |TOTAL CALORIES IN CHART : 10654.0 kcal|
+                                                                               ---------------------------------------
+Thank you for shopping and welcome again ! :)
