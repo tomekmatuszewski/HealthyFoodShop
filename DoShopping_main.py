@@ -20,9 +20,6 @@ for category in categories:
 		else:
 			MainWarehouse.Warehouse[item.name] = 50
 		
-		
-#print(MainWarehouse.Warehouse)
-
 # Creating Shopping List !!!!
 new_Shopping_Cart = ShoppingList()
 
