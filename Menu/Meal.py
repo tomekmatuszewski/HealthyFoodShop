@@ -54,31 +54,46 @@ class Meal(Product):
 		self.products_list[product] -= grams
 		if self.products_list[product] <= 0:
 			del self.products_list[product]
+			
+	def remove_item(self, product):
+		del self.products_list[product]
 	
 	def show_products_in_meal(self):
 		counter = 1
+		print('*' * 150)
 		print(self.name)
 		for k, v in self.products_list.items():
-			print("{}. {}: {}g. ".format(counter, k, v))
+			print("{}. {}: {}g, proteins: {} g., carbohydrates: {} g., fats: {} g., calories: {} kcal: ".format(counter, k, v,
+			                    round(float(k.nutri_per_100["Protein(g)"])*v/100, 2), round(float(k.nutri_per_100["Carbo(g)"])*v/100, 2),
+			                    round(float(k.nutri_per_100["Fats(g)"])*v/100, 2), round(float(k.calories)*v/100, 2)))
 			counter += 1
+		print('*' * 150)
 	
 	def price_of_meal(self):
 		total_price = 0
 		for product in self.products_list.keys():
 			total_price += product.price
-		return
+		return total_price
 	
 	def get_meal_nutri(self):
-		sum_of_nutri = Counter({})
-		for product in self.products_list.keys():
-			sum_of_nutri += Counter(product.nutri_per_100)
-		return dict(sum_of_nutri)
+		sum_of_nutri = {"Protein(g)": 0, "Carbo(g)": 0, "Fats(g)": 0}
+		for product, grams in self.products_list.items():
+			sum_of_nutri["Protein(g)"] += round(float(product.nutri_per_100["Protein(g)"]) * grams / 100, 1)
+			sum_of_nutri["Carbo(g)"] += round(float(product.nutri_per_100["Carbo(g)"]) * grams / 100, 1)
+			sum_of_nutri["Fats(g)"] += round(float(product.nutri_per_100["Fats(g)"]) * grams / 100, 1)
+		return sum_of_nutri
 	
 	def get_meal_calories(self):
 		sum_of_calories = 0
-		for product in self.products_list.keys():
-			sum_of_calories += product.calories * (product.grams/100)
+		for product, grams in self.products_list.items():
+			sum_of_calories += float(product.calories) * (grams/100)
 		return round(sum_of_calories, 0)
+	
+	def __getitem__(self, key):
+		return list(self.products_list.keys())[key]
+	
+	def __len__(self):
+		return len(list(self.products_list.keys()))
 
 
 class Menu(Meal):
@@ -93,11 +108,19 @@ class Menu(Meal):
 		self.max_fats = max_fats
 		self.menu_list = []
 		self.quantity_of_meals = None
+		self.ready_meals_list = []
 	
 	def add_meal(self, meal):
 		if len(self.menu_list) > self.quantity_of_meals:
 			print("Max. quantity of meals is {}.".format(self.quantity_of_meals))
 		self.menu_list.append(meal)
+		
+	def get_meals_names(self):
+		counter = 1
+		print("Your daily meals: ")
+		for meal in self.menu_list:
+			print("{} : {}".format(counter, meal.name))
+			counter += 1
 	
 	def get_menu_info(self):
 		for meal in self.menu_list:
@@ -105,4 +128,6 @@ class Menu(Meal):
 			print("Nutritional values of {}: {}.".format(meal.name, meal.get_meal_nutri()))
 			print("Amount of calories in {}: {} kcal".format(meal.name, meal.get_meal_calories()))
 		print("\n")
+		
+		
 

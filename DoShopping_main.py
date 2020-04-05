@@ -13,7 +13,7 @@ MainWarehouse = ShopWarehouse("Healthy Food Shop Warehouse")
 for category in categories:
 	for number in range(len(food.loc[category])):
 		item = ShoppingItem(food.loc[(category,number+1), "Product"], food.loc[(category,number+1), "Price[PLN]"],{"Protein(g)": food.loc[(category,number+1), "Protein(g)"],
-		        "Fats(g)": food.loc[(category,number+1), "Fats(g)"], "Carbo(g)": food.loc[(category,number+1), "Carbo(g)"]},food.loc[(category,number+1), "Weight[g/ml]"],
+		        "Fats(g)": food.loc[(category,number+1), "Fats(g)"], "Carbo(g)": food.loc[(category, number+1), "Carbo(g)"]},food.loc[(category,number+1), "Weight[g/ml]"],
 		                    food.loc[(category,number+1), "Kcal"], food.loc[(category,number+1),"unit"])
 		if item.unit == 'kg':
 			MainWarehouse.Warehouse[item.name] = 10
@@ -37,10 +37,10 @@ while True:
 	elif index_number > len(food.loc[categories[category-1]].loc[:, ["Product","Price[PLN]"]]):
 		print("Wrong number!")
 		continue
-	item = ShoppingItem(food.loc[(categories[category-1],index_number), "Product"], food.loc[(categories[category-1],index_number), "Price[PLN]"],
-	                    {"Protein(g)": food.loc[(categories[category-1],index_number), "Protein(g)"],
-	                     "Fats(g)": food.loc[(categories[category-1],index_number), "Fats(g)"], "Carbo(g)": food.loc[(categories[category-1],index_number), "Carbo(g)"]},
-	                    food.loc[(categories[category-1],index_number), "Weight[g/ml]"], food.loc[(categories[category-1],index_number), "Kcal"], food.loc[(categories[category-1],index_number), "unit"])
+	item = ShoppingItem(food.loc[(categories[category-1], index_number), "Product"], food.loc[(categories[category-1],index_number), "Price[PLN]"],
+	                    {"Protein(g)": food.loc[(categories[category-1], index_number), "Protein(g)"],
+	                     "Fats(g)": food.loc[(categories[category-1], index_number), "Fats(g)"], "Carbo(g)": food.loc[(categories[category-1],index_number), "Carbo(g)"]},
+	                    food.loc[(categories[category-1],index_number), "Weight[g/ml]"], food.loc[(categories[category-1], index_number), "Kcal"], food.loc[(categories[category-1], index_number), "unit"])
 	print("{} : {} {} in Stock, price {} PLN/{}{}".format(item.name,MainWarehouse.Warehouse[item.name],item.unit,item.price,item.unit, ", " + str(item.weight) + "g/szt" if item.unit == 'szt' else ""))
 	number_of_products = float(input("Select quantity of products [szt/kg]: "))
 	new_Shopping_Cart.add_product(item,number_of_products)
@@ -64,7 +64,7 @@ while True:
 			if quantity > new_Shopping_Cart.List[new_Shopping_Cart[product-1]]:
 				print("Number of products in the basket is less! Choose the correct number")
 				continue
-			new_Shopping_Cart.remove_product(new_Shopping_Cart[product-1],quantity)
+			new_Shopping_Cart.remove_product(new_Shopping_Cart[product-1], quantity)
 			new_Shopping_Cart.Show_Shopping_list()
 			if len(new_Shopping_Cart) == 0:
 				print("Shooping Cart is Empty!!")
