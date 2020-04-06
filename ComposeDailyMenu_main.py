@@ -3,11 +3,12 @@ from Menu.Person import Person
 from Menu.factors_calc_meal import factors
 from Menu.Meal import Product, Meal, Menu
 import pandas as pd
+import copy
 
 pd.set_option('display.width', 200)
 
 # users inputs
-full_name = input("Enter your username: ")
+username = input("Enter your username: ")
 height = input("Enter your height in [cm]: ")
 weight = input("Enter your weight in [kg]: ")
 age = input("Enter your age : ")
@@ -19,7 +20,7 @@ print("\n")
 activity_index = input("Select number of your activity from list above: ")
 activity = factors.iloc[int(activity_index) - 1, 1]
 
-person1 = Person(full_name, height, weight, age, sex, activity)
+person1 = Person(username, height, weight, age, sex, activity)
 person1.show_info()
 
 menu = Menu(person1.cmr, person1.daily_carbo, person1.daily_proteins, person1.daily_fats)
@@ -67,7 +68,37 @@ while len(menu.ready_meals_list) < len(menu.menu_list):
 		                  food.loc[(categories[category - 1], index_number), "Kcal"],
 		                  food.loc[(categories[category - 1], index_number), "unit"])
 		quantity_in_grams = input("How many grams of product do you want to add: ")
-		selected_meal.add_product(product, float(quantity_in_grams))
+		
+		# blockage in case of exceeding the daily limit - calories, nutrition
+		temp_menu = copy.deepcopy(menu)
+		temp_menu.menu_list[int(chosen_meal) - 1].add_product(product, float(quantity_in_grams))
+		if temp_menu.get_menu_calories() > person1.cmr:
+			print("Your daily calorie limit is {}.".format(person1.cmr))
+			print("Calorie content of your menu after adding the last product {} kcal.".format(temp_menu.get_menu_calories()))
+			print("Reduce the number of calories!")
+			temp_menu = None
+			continue
+		elif temp_menu.get_menu_proteins() > person1.daily_proteins:
+			print("Your daily protein limit is {}.".format(person1.daily_proteins))
+			print("Proteins content of your menu after adding the last product {} g.".format(temp_menu.get_menu_proteins()))
+			print("Reduce the number of Proteins!")
+			temp_menu = None
+			continue
+		elif temp_menu.get_menu_carbohydrates() > person1.daily_carbo:
+			print("Your daily carbohydrates limit is {}.".format(person1.daily_carbo))
+			print("Carbohydrates content of your menu after adding the last product {} g.".format(temp_menu.get_menu_carbohydrates()))
+			print("Reduce the number of Carbohydrates!")
+			temp_menu = None
+			continue
+		elif temp_menu.get_menu_fats() > person1.daily_fats:
+			print("Your daily fats limit is {}.".format(person1.daily_fats))
+			print("Fats content of your menu after adding the last product {} g.".format(temp_menu.get_menu_fats()))
+			print("Reduce the number of Fats!")
+			temp_menu = None
+			continue
+		else:
+			selected_meal.add_product(product, float(quantity_in_grams))
+			
 		action = input("Select next action [Continue: (C), Remove Product: (R), Change quantity [g]: (Q), Finish (F)]: ")
 		if action == "C":
 			continue
@@ -84,7 +115,7 @@ while len(menu.ready_meals_list) < len(menu.menu_list):
 				if change_quantity == "R":
 					quantity = float(input("How many grams of product do you want to remove: "))
 					if quantity > selected_meal.products_list[selected_meal[number_product - 1]]:
-						print("the number of grams of this product is less.Choose the correct number")
+						print("The number of grams of this product is less.Choose the correct number")
 						continue
 					selected_meal.remove_product(selected_meal[number_product - 1], quantity)
 					if len(selected_meal) == 0:

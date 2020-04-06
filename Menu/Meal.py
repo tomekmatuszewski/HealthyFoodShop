@@ -1,6 +1,3 @@
-from collections import Counter
-
-
 class Product:
 	
 	def __init__(self, name, price, nutri_per_100, weight, calories, unit):
@@ -64,8 +61,8 @@ class Meal(Product):
 		print(self.name)
 		for k, v in self.products_list.items():
 			print("{}. {}: {}g, proteins: {} g., carbohydrates: {} g., fats: {} g., calories: {} kcal: ".format(counter, k, v,
-			                    round(float(k.nutri_per_100["Protein(g)"])*v/100, 2), round(float(k.nutri_per_100["Carbo(g)"])*v/100, 2),
-			                    round(float(k.nutri_per_100["Fats(g)"])*v/100, 2), round(float(k.calories)*v/100, 2)))
+			                    round(float(k.nutri_per_100["Protein(g)"])*v/100, 1), round(float(k.nutri_per_100["Carbo(g)"])*v/100, 1),
+			                    round(float(k.nutri_per_100["Fats(g)"])*v/100, 1), round(float(k.calories)*v/100, 1)))
 			counter += 1
 		print('*' * 150)
 	
@@ -78,24 +75,24 @@ class Meal(Product):
 	def get_meal_nutri(self):
 		sum_of_nutri = {"Protein(g)": 0, "Carbo(g)": 0, "Fats(g)": 0}
 		for product, grams in self.products_list.items():
-			sum_of_nutri["Protein(g)"] += round(float(product.nutri_per_100["Protein(g)"]) * grams / 100, 1)
-			sum_of_nutri["Carbo(g)"] += round(float(product.nutri_per_100["Carbo(g)"]) * grams / 100, 1)
-			sum_of_nutri["Fats(g)"] += round(float(product.nutri_per_100["Fats(g)"]) * grams / 100, 1)
+			sum_of_nutri["Protein(g)"] += float(product.nutri_per_100["Protein(g)"]) * round(grams / 100, 1)
+			sum_of_nutri["Carbo(g)"] += float(product.nutri_per_100["Carbo(g)"]) * round(grams / 100, 1)
+			sum_of_nutri["Fats(g)"] += float(product.nutri_per_100["Fats(g)"]) * round(grams / 100, 1)
 		return sum_of_nutri
 	
 	def get_meal_calories(self):
 		sum_of_calories = 0
 		for product, grams in self.products_list.items():
 			sum_of_calories += float(product.calories) * (grams/100)
-		return round(sum_of_calories, 0)
+		return round(sum_of_calories, 1)
 	
 	def __getitem__(self, key):
 		return list(self.products_list.keys())[key]
 	
 	def __len__(self):
 		return len(list(self.products_list.keys()))
-
-
+	
+	
 class Menu(Meal):
 	
 	possible_set_meals = {1: ["Breakfast", "Dinner", "Supper"], 2: ["Breakfast", "Lunch", "Dinner", "Supper"],
@@ -122,12 +119,43 @@ class Menu(Meal):
 			print("{} : {}".format(counter, meal.name))
 			counter += 1
 	
+	def get_menu_calories(self):
+		total_calories = 0
+		for meal in self.menu_list:
+			total_calories += meal.get_meal_calories()
+		return round(total_calories, 2)
+	
+	def get_menu_proteins(self):
+		total_proteins = 0
+		for meal in self.menu_list:
+			total_proteins += meal.get_meal_nutri()["Protein(g)"]
+		return round(total_proteins, 2)
+	
+	def get_menu_carbohydrates(self):
+		total_carbohydrates = 0
+		for meal in self.menu_list:
+			total_carbohydrates += meal.get_meal_nutri()["Carbo(g)"]
+		return round(total_carbohydrates, 2)
+
+	def get_menu_fats(self):
+		total_fats = 0
+		for meal in self.menu_list:
+			total_fats += meal.get_meal_nutri()["Fats(g)"]
+		return round(total_fats, 2)
+		
 	def get_menu_info(self):
 		for meal in self.menu_list:
 			meal.show_products_in_meal()
-			print("Nutritional values of {}: {}.".format(meal.name, meal.get_meal_nutri()))
+			print("Nutritional values of {}: Proteins: {} g, Carbohydrates {} g, Fats {} g.".format(meal.name,
+			    round(meal.get_meal_nutri()["Protein(g)"], 1), round(meal.get_meal_nutri()["Carbo(g)"], 1),
+			    round(meal.get_meal_nutri()["Fats(g)"], 1)))
 			print("Amount of calories in {}: {} kcal".format(meal.name, meal.get_meal_calories()))
+		print("Total caloric value of the daily menu: {} kcal".format(self.get_menu_calories()))
+		print("Total protein in the daily menu: {} g".format(self.get_menu_proteins()))
+		print("Total carbohydrates in the daily menu: {} g".format(self.get_menu_carbohydrates()))
+		print("Total fats in the daily menu: {} g".format(self.get_menu_fats()))
 		print("\n")
 		
-		
+	
+	
 
