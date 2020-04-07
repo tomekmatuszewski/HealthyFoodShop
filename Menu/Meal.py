@@ -105,7 +105,6 @@ class Menu(Meal):
 		self.max_fats = max_fats
 		self.menu_list = []
 		self.quantity_of_meals = None
-		self.ready_meals_list = []
 	
 	def add_meal(self, meal):
 		if len(self.menu_list) > self.quantity_of_meals:
@@ -116,7 +115,8 @@ class Menu(Meal):
 		counter = 1
 		print("Your daily meals: ")
 		for meal in self.menu_list:
-			print("{} : {}".format(counter, meal.name))
+			print("{} : {}{}".format(counter, meal.name, ", {} product{} added".format(len(meal.products_list.keys()),
+			    "s" if len(meal.products_list.keys()) > 1 else "") if len(meal.products_list.keys()) else ""))
 			counter += 1
 	
 	def get_menu_calories(self):

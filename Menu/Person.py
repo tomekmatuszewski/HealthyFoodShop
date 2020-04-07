@@ -20,4 +20,4 @@ class Person:
 		print("*"*150)
 		print("Your daily caloric demand is: {} kcal".format(self.cmr))
 		print("Your max. daily requirement for protein, fats and carbohydrates is: ")
-		print("Proteins - {} g, Fats - {} g, Carbohydrates - {} g.".format(self.daily_proteins, self.daily_fats, self.daily_carbo))
+		print("Proteins - {} g, Fats - {} g, Carbohydrates - {} g.\n".format(self.daily_proteins, self.daily_fats, self.daily_carbo))
