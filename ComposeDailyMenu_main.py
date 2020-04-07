@@ -47,7 +47,8 @@ while True:
 	
 	while True:
 		if len(selected_meal) == 0:
-			action = input("Select action [Add product: (A), Finish (F), Print your personal parameters (P)]: ")
+			print("Completing {}".format(selected_meal.get_meal_name()))
+			action = input("Select action [Add product: (A), Finish (F), Print personal parameters (P)]: ")
 			if action == "F":
 				break
 			elif action == "P":
@@ -73,14 +74,20 @@ while True:
 				                  {"Protein(g)": food.loc[(categories[category - 1], index_number), "Protein(g)"],
 				                   "Fats(g)": food.loc[(categories[category - 1], index_number), "Fats(g)"],
 				                   "Carbo(g)": food.loc[(categories[category - 1], index_number), "Carbo(g)"]},
-				                  food.loc[(categories[category - 1], index_number), "Weight[g/ml]"],
+				                  food.loc[(categories[category - 1], index_number), "Weight_pcs/pack[g]"],
 				                  food.loc[(categories[category - 1], index_number), "Kcal"],
 				                  food.loc[(categories[category - 1], index_number), "unit"])
-				quantity_in_grams = input("How many grams of product do you want to add: ")
-				
+				print("Weight of average piece/portion of {}: {}g.".format(product.name, product.weight))
+				unit_type = input("Select unit type g [G] / psc. [P]: ")
+				if unit_type == "G":
+					quantity_in_grams = input("How many grams of product do you want to add: ")
+					quantity = float(quantity_in_grams)
+				elif unit_type == "P":
+					quantity_in_pcs = input("How many pcs. of product do you want to add: ")
+					quantity = float(quantity_in_pcs) * float(product.weight)
 				# blockage in case of exceeding the daily limit - calories, nutrition
 				temp_menu = copy.deepcopy(menu)
-				temp_menu.menu_list[int(chosen_meal) - 1].add_product(product, float(quantity_in_grams))
+				temp_menu.menu_list[int(chosen_meal) - 1].add_product(product, quantity)
 				if temp_menu.get_menu_calories() > person1.cmr:
 					print("Your daily calorie limit is {}.".format(person1.cmr))
 					print("Calorie content of your menu after adding the last product {} kcal.".format(
@@ -109,9 +116,10 @@ while True:
 					temp_menu = None
 					continue
 				else:
-					selected_meal.add_product(product, float(quantity_in_grams))
+					selected_meal.add_product(product, quantity)
 		
 		if len(selected_meal) > 0:
+			print("Completing {}".format(selected_meal.get_meal_name()))
 			action = input("Select action [Add product: (A), Remove Product: (R), "
 			               "Change quantity [g]: (Q), Finish (F), Print your personal parameters and menu (P)]: ")
 			if action == "A":
@@ -123,8 +131,7 @@ while True:
 					continue
 				elif category == 0:
 					break
-				print(
-					food.loc[categories[category - 1]].loc[:, ["Product", 'Kcal', 'Carbo(g)', 'Protein(g)', 'Fats(g)']])
+				print(food.loc[categories[category - 1]].loc[:, ["Product", 'Kcal', 'Carbo(g)', 'Protein(g)', 'Fats(g)']])
 				index_number = int(input('Select number of product from list above [select "0" to undo]: '))
 				if index_number == 0:
 					continue
@@ -137,14 +144,21 @@ while True:
 				                  {"Protein(g)": food.loc[(categories[category - 1], index_number), "Protein(g)"],
 				                   "Fats(g)": food.loc[(categories[category - 1], index_number), "Fats(g)"],
 				                   "Carbo(g)": food.loc[(categories[category - 1], index_number), "Carbo(g)"]},
-				                  food.loc[(categories[category - 1], index_number), "Weight[g/ml]"],
+				                  food.loc[(categories[category - 1], index_number), "Weight_pcs/pack[g]"],
 				                  food.loc[(categories[category - 1], index_number), "Kcal"],
 				                  food.loc[(categories[category - 1], index_number), "unit"])
-				quantity_in_grams = input("How many grams of product do you want to add: ")
+				print("Weight of average piece/portion of {}: {}.".format(product.name, product.weight))
+				unit_type = input("Select unit type g [G] / psc. [P]: ")
+				if unit_type == "G":
+					quantity_in_grams = input("How many grams of product do you want to add: ")
+					quantity = float(quantity_in_grams)
+				elif unit_type == "P":
+					quantity_in_pcs = input("How many pcs. of product do you want to add: ")
+					quantity = float(quantity_in_pcs) * float(product.weight)
 				
 				# blockage in case of exceeding the daily limit - calories, nutrition
 				temp_menu = copy.deepcopy(menu)
-				temp_menu.menu_list[int(chosen_meal) - 1].add_product(product, float(quantity_in_grams))
+				temp_menu.menu_list[int(chosen_meal) - 1].add_product(product, quantity)
 				if temp_menu.get_menu_calories() > person1.cmr:
 					print("Your daily calorie limit is {}.".format(person1.cmr))
 					print("Calorie content of your menu after adding the last product {} kcal.".format(
@@ -174,7 +188,7 @@ while True:
 					temp_menu = None
 					continue
 				else:
-					selected_meal.add_product(product, float(quantity_in_grams))
+					selected_meal.add_product(product, quantity)
 				
 			elif action == "Q":
 				while True:
@@ -187,9 +201,16 @@ while True:
 						continue
 					change_quantity = input("Select: increase the number of grams of the product - [A], reduce the number of grams of the product [R], Finish [F]: ")
 					if change_quantity == "R":
-						quantity = float(input("How many grams of product do you want to remove: "))
+						print("Weight of average piece/portion of {}: {}g".format(product.name, product.weight))
+						unit_type = input("Select unit type g [G] / psc. [P]: ")
+						if unit_type == "G":
+							quantity_in_grams = input("How many grams of product do you want to remove: ")
+							quantity = float(quantity_in_grams)
+						elif unit_type == "P":
+							quantity_in_pcs = input("How many pcs. of product do you want to remove: ")
+							quantity = float(quantity_in_pcs) * float(product.weight)
 						if quantity > selected_meal.products_list[selected_meal[number_product - 1]]:
-							print("The number of grams of this product is less.Choose the correct number")
+							print("Quantity of this product in your meal is less.Choose the correct quantity")
 							continue
 						selected_meal.remove_product(selected_meal[number_product - 1], quantity)
 						if len(selected_meal) == 0:
@@ -204,7 +225,14 @@ while True:
 							print("Wrong command!")
 							continue
 					elif change_quantity == "A":
-						quantity = float(input("How many grams of product do you want to add: "))
+						print("Weight of average piece/portion of {}: {}g.".format(product.name, product.weight))
+						unit_type = input("Select unit type g [G] / psc. [P]: ")
+						if unit_type == "G":
+							quantity_in_grams = input("How many grams of product do you want to add: ")
+							quantity = float(quantity_in_grams)
+						elif unit_type == "P":
+							quantity_in_pcs = input("How many pcs. of product do you want to add: ")
+							quantity = float(quantity_in_pcs) * float(product.weight)
 						selected_meal.add_product(selected_meal[number_product - 1], quantity)
 						change_next = input("Do you want to increase the quantity of another product? [Y/N]: ")
 						if change_next == "Y":

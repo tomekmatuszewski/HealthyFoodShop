@@ -86,6 +86,9 @@ class Meal(Product):
 			sum_of_calories += float(product.calories) * (grams/100)
 		return round(sum_of_calories, 1)
 	
+	def get_meal_name(self):
+		return self.name
+	
 	def __getitem__(self, key):
 		return list(self.products_list.keys())[key]
 	

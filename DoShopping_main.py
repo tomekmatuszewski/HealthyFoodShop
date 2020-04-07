@@ -30,20 +30,20 @@ while True:
 	if category > len(categories):
 		print("Wrong number!")
 		continue
-	print(food.loc[categories[category-1]].loc[:, ["Product","Price[PLN]"]])
+	print(food.loc[categories[category-1]].loc[:, ["Product", "Price[PLN]"]])
 	index_number = int(input('Select number of product from list above [select "0" to undo]: '))
 	if index_number == 0:
 		continue
-	elif index_number > len(food.loc[categories[category-1]].loc[:, ["Product","Price[PLN]"]]):
+	elif index_number > len(food.loc[categories[category-1]].loc[:, ["Product", "Price[PLN]"]]):
 		print("Wrong number!")
 		continue
 	item = ShoppingItem(food.loc[(categories[category-1], index_number), "Product"], food.loc[(categories[category-1],index_number), "Price[PLN]"],
 	                    {"Protein(g)": food.loc[(categories[category-1], index_number), "Protein(g)"],
 	                     "Fats(g)": food.loc[(categories[category-1], index_number), "Fats(g)"], "Carbo(g)": food.loc[(categories[category-1],index_number), "Carbo(g)"]},
-	                    food.loc[(categories[category-1],index_number), "Weight[g/ml]"], food.loc[(categories[category-1], index_number), "Kcal"], food.loc[(categories[category-1], index_number), "unit"])
-	print("{} : {} {} in Stock, price {} PLN/{}{}".format(item.name,MainWarehouse.Warehouse[item.name],item.unit,item.price,item.unit, ", " + str(item.weight) + "g/szt" if item.unit == 'szt' else ""))
+	                    food.loc[(categories[category-1], index_number), "Weight[g/ml]"], food.loc[(categories[category-1], index_number), "Kcal"], food.loc[(categories[category-1], index_number), "unit"])
+	print("{} : {} {} in Stock, price {} PLN/{}{}".format(item.name, MainWarehouse.Warehouse[item.name], item.unit, item.price, item.unit, ", " + str(item.weight) + "g/szt" if item.unit == 'szt' else ""))
 	number_of_products = float(input("Select quantity of products [szt/kg]: "))
-	new_Shopping_Cart.add_product(item,number_of_products)
+	new_Shopping_Cart.add_product(item, number_of_products)
 	print("Item added to Shopping Cart :)")
 	view_of_chart = input("Do you want to view the contents of the basket [Y/N]:")
 	if view_of_chart == 'Y':
