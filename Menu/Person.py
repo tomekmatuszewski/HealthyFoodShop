@@ -1,8 +1,8 @@
 from Menu.utils import caluculate_bmi, calculate_bmr
 
 class Person:
-	def __init__(self, full_name, height, weight, age, sex, activity):
-		self.full_name = full_name
+	def __init__(self, username, height, weight, age, sex, activity):
+		self.username = username
 		self.height = float(height)
 		self.weight = float(weight)
 		self.age = int(age)
@@ -17,7 +17,12 @@ class Person:
 		
 	
 	def show_info(self):
-		print("*"*150)
-		print("Your daily caloric demand is: {} kcal".format(self.cmr))
-		print("Your max. daily requirement for protein, fats and carbohydrates is: ")
-		print("Proteins - {} g, Fats - {} g, Carbohydrates - {} g.\n".format(self.daily_proteins, self.daily_fats, self.daily_carbo))
+		print("-" * 58)
+		print("Username: {}, Height: {} cm, Weight: {} kg, Age: {} y.".format(self.username, self.height, self.weight, self.age))
+		print("-"*58)
+		print("|{:<43} {:7.2f} {:<4}|".format('Your max. daily caloric demand is:', self.cmr, 'kcal'))
+		print("|{:<46} {:7.2f} {}|".format('Your max. daily requirement for protein:', self.daily_proteins, 'g'))
+		print("|{:<46} {:7.2f} {}|".format('Your max. daily requirement for fats:', self.daily_fats, 'g'))
+		print("|{:<46} {:7.2f} {}|".format('Your max. daily requirement for carbohydrates:', self.daily_carbo, 'g'))
+		print("-" * 58)
+		

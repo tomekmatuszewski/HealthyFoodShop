@@ -4,22 +4,28 @@ from Menu.factors_calc_meal import factors
 from Menu.Meal import Product, Meal, Menu
 import pandas as pd
 import copy
+from Menu.utils import *
 
 pd.set_option('display.width', 200)
 
 # users inputs
-username = input("Enter your username: ")
+username = input("Enter your username [max 20 alphanum. characters('.'/'_'/'-' are allowed, min. 2 letters): ")
+username = check_username(username)
 height = input("Enter your height in [cm]: ")
+height = check_height(height)
 weight = input("Enter your weight in [kg]: ")
+weight = check_weight(weight)
 age = input("Enter your age : ")
+age = check_age(age)
 sex = input("Enter your sex [M/F]: ")
+sex = check_sex(sex)
 print("\nDaily activities: ")
 for i in range(1, len(factors) + 1):
 	print("{} : {}".format(i, factors.loc[i, 'Activity']))
 	
 activity_index = input("Select number of your activity from list above: ")
+activity_index = check_activity_index(activity_index, factors)
 activity = factors.iloc[int(activity_index) - 1, 1]
-
 person1 = Person(username, height, weight, age, sex, activity)
 person1.show_info()
 
