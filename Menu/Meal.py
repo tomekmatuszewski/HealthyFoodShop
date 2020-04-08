@@ -116,11 +116,13 @@ class Menu(Meal):
 		
 	def get_meals_names(self):
 		counter = 1
+		print("-" * 40)
 		print("Your daily meals: ")
 		for meal in self.menu_list:
-			print("{} : {}{}".format(counter, meal.name, ", {} product{} added".format(len(meal.products_list.keys()),
+			print("{}: {:<15}{:<22}".format(counter, meal.name, "---> {} product{} added".format(len(meal.products_list.keys()),
 			    "s" if len(meal.products_list.keys()) > 1 else "") if len(meal.products_list.keys()) else ""))
 			counter += 1
+		print("-" * 40)
 	
 	def get_menu_calories(self):
 		total_calories = 0
