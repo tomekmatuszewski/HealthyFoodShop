@@ -57,14 +57,20 @@ class Meal(Product):
 	
 	def show_products_in_meal(self):
 		counter = 1
-		print('*' * 150)
-		print(self.name)
+		print("{} :".format(self.name))
 		for k, v in self.products_list.items():
-			print("{}. {}: {}g, proteins: {} g., carbohydrates: {} g., fats: {} g., calories: {} kcal: ".format(counter, k, v,
-			                    round(float(k.nutri_per_100["Protein(g)"])*v/100, 1), round(float(k.nutri_per_100["Carbo(g)"])*v/100, 1),
-			                    round(float(k.nutri_per_100["Fats(g)"])*v/100, 1), round(float(k.calories)*v/100, 1)))
+			print('{}. {:41}\n\
+	----->      {:>14} {:7.1f} g\n\
+	----->      {:>15} {:7.2f} kcal\n\
+	----->      {:>15} {:7.2f} g\n\
+	----->      {:>15} {:7.2f} g\n\
+	----->      {:>15} {:7.2f} g'.format(counter, k.name + ':', "Product weight:", float(v),
+			                             "Calories:", float(k.calories) * float(v) / 100,
+			                             "Proteins:", float(k.nutri_per_100["Protein(g)"]) * float(v) / 100,
+			                             "Fats:", float(k.nutri_per_100["Fats(g)"]) * float(v) / 100,
+			                             "Carbohydrates:", float(k.nutri_per_100["Carbo(g)"]) * float(v) / 100))
 			counter += 1
-		print('*' * 150)
+		print('-' * 58)
 	
 	def price_of_meal(self):
 		total_price = 0

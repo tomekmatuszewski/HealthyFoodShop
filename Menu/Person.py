@@ -1,5 +1,6 @@
 from Menu.utils import caluculate_bmi, calculate_bmr
 
+
 class Person:
 	def __init__(self, username, height, weight, age, sex, activity):
 		self.username = username
@@ -15,7 +16,6 @@ class Person:
 		self.daily_fats = round((self.cmr * 0.25)/9, 0)
 		self.daily_carbo = round((self.cmr * 0.55)/4, 0)
 		
-	
 	def show_info(self):
 		print("-" * 58)
 		print("Username: {}, Height: {} cm, Weight: {} kg, Age: {} y.".format(self.username, self.height, self.weight, self.age))
@@ -25,4 +25,3 @@ class Person:
 		print("|{:<46} {:7.2f} {}|".format('Your max. daily requirement for fats:', self.daily_fats, 'g'))
 		print("|{:<46} {:7.2f} {}|".format('Your max. daily requirement for carbohydrates:', self.daily_carbo, 'g'))
 		print("-" * 58)
-		

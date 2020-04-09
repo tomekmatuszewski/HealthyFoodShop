@@ -15,14 +15,17 @@ height = input("Enter your height in [cm]: ")
 height = check_height(height)
 weight = input("Enter your weight in [kg]: ")
 weight = check_weight(weight)
-age = input("Enter your age : ")
+age = input("Enter your age: ")
 age = check_age(age)
 sex = input("Enter your sex [M/F]: ")
 sex = check_sex(sex)
-print("\nDaily activities: ")
+
+print("-"*59)
+print("Daily activities: ")
 for i in range(1, len(factors) + 1):
 	print("{} : {}".format(i, factors.loc[i, 'Activity']))
-	
+print("-"*59)
+
 activity_index = input("Select number of your activity from list above: ")
 activity_index = check_activity_index(activity_index, factors)
 activity = factors.iloc[int(activity_index) - 1, 1]
@@ -157,7 +160,7 @@ while True:
 				                  food.loc[(categories[category - 1], index_number), "Weight_pcs/pack[g]"],
 				                  food.loc[(categories[category - 1], index_number), "Kcal"],
 				                  food.loc[(categories[category - 1], index_number), "unit"])
-				print("Weight of average piece/portion of {}: {}.".format(product.name, product.weight))
+				print("Weight of average piece/portion of {}: {} g".format(product.name, product.weight))
 				unit_type = input("Select unit type g [G] / psc. [P]: ")
 				unit_type = check_unit(unit_type)
 				if unit_type == "G":
