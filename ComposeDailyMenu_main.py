@@ -13,7 +13,7 @@ username = input("Enter your username [max 20 alphanum. characters('.'/'_'/'-' a
 username = check_username(username)
 height = input("Enter your height in [cm]: ")
 height = check_height(height)
-weight = input("Enter your weight in [kg]: ")
+weight = input("Enter your weight in [kg]: ")cd
 weight = check_weight(weight)
 age = input("Enter your age: ")
 age = check_age(age)
@@ -34,9 +34,7 @@ person1.show_info()
 
 menu = Menu(person1.cmr, person1.daily_carbo, person1.daily_proteins, person1.daily_fats)
 
-print("Possible set of meals per day: ")
-for k, v in menu.possible_set_meals.items():
-	print("{}. {}".format(k, v))
+menu.show_possible_set_meals()
 
 your_menu = input("Select set of meals from list above: ")
 your_menu = check_set_menu(your_menu, menu.possible_set_meals.keys())
@@ -262,9 +260,7 @@ while True:
 				if continue_adding == "Y":
 					continue
 				elif continue_adding == "N":
-					print("*" * 150)
 					selected_meal.show_products_in_meal()
-					print("*" * 150)
 					break
 					
 			elif action == "R":
@@ -291,9 +287,7 @@ while True:
 				if continue_adding == "Y":
 					continue
 				elif continue_adding == "N":
-					print("*" * 150)
 					selected_meal.show_products_in_meal()
-					print("*" * 150)
 					break
 					
 			elif action == "P":
@@ -303,7 +297,5 @@ while True:
 			elif action == 'F':
 				break
 			
-		
-			
 menu.get_menu_info()
-
+print("ENJOY ! :)")

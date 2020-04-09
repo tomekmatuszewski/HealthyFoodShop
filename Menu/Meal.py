@@ -57,7 +57,7 @@ class Meal(Product):
 	
 	def show_products_in_meal(self):
 		counter = 1
-		print("{} :".format(self.name))
+		print("{} :".format(self.name.upper()))
 		for k, v in self.products_list.items():
 			print('{}. {:41}\n\
 	----->      {:>14} {:7.1f} g\n\
@@ -70,7 +70,7 @@ class Meal(Product):
 			                             "Fats:", float(k.nutri_per_100["Fats(g)"]) * float(v) / 100,
 			                             "Carbohydrates:", float(k.nutri_per_100["Carbo(g)"]) * float(v) / 100))
 			counter += 1
-		print('-' * 58)
+		print('-' * 56)
 	
 	def price_of_meal(self):
 		total_price = 0
@@ -105,7 +105,8 @@ class Meal(Product):
 class Menu(Meal):
 	
 	possible_set_meals = {1: ["Breakfast", "Dinner", "Supper"], 2: ["Breakfast", "Lunch", "Dinner", "Supper"],
-	                      3: ["Breakfast", "Lunch", "Dinner", "Afternoon snack", "Supper"]}
+	                      3: ["Breakfast", "Lunch", "Dinner", "Afternoon snack", "Supper"],
+	                      4: ["Breakfast", "Lunch", "Dinner", "Afternoon snack", 'Post-workout meal', "Supper"]}
 	
 	def __init__(self, max_calories, max_carbo, max_protein, max_fats):
 		self.max_calories = max_calories
@@ -125,7 +126,7 @@ class Menu(Meal):
 		print("-" * 40)
 		print("Your daily meals: ")
 		for meal in self.menu_list:
-			print("{}: {:<15}{:<22}".format(counter, meal.name, "---> {} product{} added".format(len(meal.products_list.keys()),
+			print("{}: {:<19}{:<22}".format(counter, meal.name, "---> {} product{} added".format(len(meal.products_list.keys()),
 			    "s" if len(meal.products_list.keys()) > 1 else "") if len(meal.products_list.keys()) else ""))
 			counter += 1
 		print("-" * 40)
@@ -157,16 +158,31 @@ class Menu(Meal):
 	def get_menu_info(self):
 		for meal in self.menu_list:
 			meal.show_products_in_meal()
-			print("Nutritional values of {}: Proteins: {} g, Carbohydrates {} g, Fats {} g.".format(meal.name,
-			    round(meal.get_meal_nutri()["Protein(g)"], 1), round(meal.get_meal_nutri()["Carbo(g)"], 1),
-			    round(meal.get_meal_nutri()["Fats(g)"], 1)))
-			print("Amount of calories in {}: {} kcal".format(meal.name, meal.get_meal_calories()))
-		print("Total caloric value of the daily menu: {} kcal".format(self.get_menu_calories()))
-		print("Total protein in the daily menu: {} g".format(self.get_menu_proteins()))
-		print("Total carbohydrates in the daily menu: {} g".format(self.get_menu_carbohydrates()))
-		print("Total fats in the daily menu: {} g".format(self.get_menu_fats()))
-		print("\n")
+			print('Complete nutrition information for {}:\n\
+		TOTAL:	----->      {:>15} {:7.2f} kcal\n\
+				----->      {:>15} {:7.2f} g\n\
+				----->      {:>15} {:7.2f} g\n\
+				----->      {:>15} {:7.2f} g'.format(meal.name.upper(), "Calories:", meal.get_meal_calories(), "Proteins:",
+			                                         meal.get_meal_nutri()["Protein(g)"], "Fats:",
+			                                         meal.get_meal_nutri()["Fats(g)"], "Carbohydrates:",
+			                                         meal.get_meal_nutri()["Carbo(g)"]))
+			print('-' * 56)
+		print("Summary of values for the daily menu: ")
+		print("Total {:<15}    {:7.2f} kcal".format('calories:', self.get_menu_calories()))
+		print("Total {:<15}    {:7.2f} g".format('proteins:', self.get_menu_proteins()))
+		print("Total {:<15}    {:7.2f} g".format('fats:', self.get_menu_fats()))
+		print("Total {:<15}    {:7.2f} g".format('carbohydrates:', self.get_menu_carbohydrates()))
+		print('-' * 56)
 		
-	
+	def show_possible_set_meals(self):
+		print("Possible set of meals per day: ")
+		for k, v in self.possible_set_meals.items():
+			item = ""
+			for meal in v:
+				if v.index(meal) == len(v) - 1:
+					item += meal.upper()
+				else:
+					item += meal.upper() + ", "
+			print("{}. {}".format(k, item))
 	
 
