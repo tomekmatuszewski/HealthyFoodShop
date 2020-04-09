@@ -180,9 +180,9 @@ class Menu(Meal):
 			item = ""
 			for meal in v:
 				if v.index(meal) == len(v) - 1:
-					item += meal.upper()
+					item += meal
 				else:
-					item += meal.upper() + ", "
+					item += meal + ", "
 			print("{}. {}".format(k, item))
 	
 
