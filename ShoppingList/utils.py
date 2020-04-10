@@ -23,20 +23,27 @@ def check_index_number(index, list_index):
 	return int(index)
 
 
-def check_selected_unit(quantity):
-	while True:
-		try:
-			if quantity == "0":
-				print("Select the correct quantity [g or pcs.  > 0]!")
-				quantity = input("How many grams/pcs. of product do you want to add: ")
-				continue
-			float(quantity)
-			return float(quantity)
-			break
-		except ValueError:
-			print("Select the correct quantity [kg or szt.  > 0]!")
-			quantity = input("How many grams/pcs. of product do you want to add: ")
+def check_selected_unit(quantity, item):
+	if item.unit == "szt":
+		while not quantity.isdecimal():
+			print("The selected product - {} is sold in whole pieces. Please select a valid quantity".format(item.name))
+			quantity = input("Select quantity of products [szt]: ")
 			continue
+		return int(quantity)
+	else:
+		while True:
+			try:
+				if quantity == "0":
+					print("Select the correct quantity [kg > 0]!")
+					quantity = input("How many kg. of product do you want to add: ")
+					continue
+				float(quantity)
+				return float(quantity)
+				break
+			except ValueError:
+				print("Select the correct quantity [kg > 0]!")
+				quantity = input("How many kg. of product do you want to add: ")
+				continue
 
 
 def check_view_of_chart(view_of_cart):

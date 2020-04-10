@@ -298,4 +298,5 @@ while True:
 				break
 			
 menu.get_menu_info()
+menu.print_menu(person1)
 print("ENJOY ! :)")
