@@ -1,8 +1,8 @@
 from datetime import datetime
 import json
-from ShoppingList.utils import check_selected_unit
 from ShoppingList.Database_food import food, categories
 from ShoppingList.ShoppingItem import ShoppingItem
+from ShoppingList.utils import *
 
 
 class ShopWarehouse(object):
@@ -37,35 +37,94 @@ class ShoppingList(ShopWarehouse):
 		self.date = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 		self.cart = {}
 	
-	def add_product(self, product, quantity):
-		while float(quantity) > self.warehouse[product.name] or product.name not in self.warehouse.keys():
-			print("Not enough products in stock!")
-			if product.unit == "kg":
-				quantity = input("Select quantity of products [kg]: ")
-				quantity = check_selected_unit(quantity, product)
+	def add_product(self):
+		while True:
+			for item in range(len(categories)):
+				print("{}: {}".format(item + 1, categories[item]))
+			category = input("Select categories [1-22]: ")
+			category = check_category(category, categories)
+			print(food.loc[categories[category - 1]].loc[:, ["Product", "Price[PLN]"]])
+			index_number = input('Select number of product from list above [select "0" to undo]: ')
+			index_number = check_index_number(index_number,
+			                                  food.loc[categories[category - 1]].loc[:, ["Product", "Price[PLN]"]])
+			if index_number == 0:
 				continue
-			else:
+			item = ShoppingItem.create_shopping_item(category, index_number)
+			self.show_availability(item)
+			if item.unit == "szt":
 				quantity = input("Select quantity of products [szt]: ")
-				quantity = check_selected_unit(quantity, product)
-				continue
-		else:
-			if product not in self.cart:
-				self.cart[product] = 0
-				self.cart[product] += quantity
-				self.warehouse[product.name] -= quantity
+				quantity = check_selected_unit(quantity, item)
 			else:
-				self.cart[product] += quantity
-				self.warehouse[product.name] -= quantity
+				quantity = input("Select quantity of products [kg]: ")
+				quantity = check_selected_unit(quantity, item)
+			while float(quantity) > self.warehouse[item.name] or item.name not in self.warehouse.keys():
+				print("Not enough products in stock!")
+				if item.unit == "kg":
+					quantity = input("Select quantity of products [kg]: ")
+					quantity = check_selected_unit(quantity, item)
+					continue
+				else:
+					quantity = input("Select quantity of products [szt]: ")
+					quantity = check_selected_unit(quantity, item)
+					continue
+			else:
+				if item not in self.cart:
+					self.cart[item] = 0
+					self.cart[item] += quantity
+					self.warehouse[item.name] -= quantity
+				else:
+					self.cart[item] += quantity
+					self.warehouse[item.name] -= quantity
+			print("Item added to Shopping Cart :)")
+			break
 	
-	def remove_product(self, product, numbers):
-		self.cart[product] -= numbers
-		self.warehouse[product.name] += numbers
-		if self.cart[product] <= 0:
-			del self.cart[product]
+	def remove_product(self):
+		while True:
+			self.show_shopping_list()
+			product = input("Select position from Shopping List [select 0 to Undo]: ")
+			product = check_product(product, self)
+			if product == 0:
+				break
+			elif self[product - 1].unit == "szt":
+				quantity = input("How many products do you want to remove [szt]: ")
+				quantity = check_selected_unit(quantity, self[product - 1])
+			elif self[product - 1].unit == "kg":
+				quantity = input("How many products do you want to remove [kg]: ")
+				quantity = check_selected_unit(quantity, self[product - 1])
+			if quantity > self.cart[self[product - 1]]:
+				print("Number of products in the basket is less! Choose the correct number")
+				continue
+			self.cart[self[product - 1]] -= quantity
+			self.warehouse[self[product - 1].name] += quantity
+			if self.cart[self[product - 1]] <= 0:
+				del self.cart[self[product - 1]]
+			self.show_shopping_list()
+			if len(self) == 0:
+				print("Shopping Cart is Empty!!")
+				break
+			else:
+				break
 	
-	def increase_number_product(self, product, quantity):
-		self.cart[product] += quantity
-		self.warehouse[product.name] -= quantity
+	def increase_number_product(self):
+		while True:
+			self.show_shopping_list()
+			product = input("Select position from Shopping List [select 0 to Undo]: ")
+			product = check_product(product, self)
+			if product == 0:
+				break
+			elif self[product - 1].unit == 'szt':
+				quantity = input("How many products do you want to add [szt]: ")
+				quantity = check_selected_unit(quantity, self[product - 1])
+			elif self[product - 1].unit == 'kg':
+				quantity = input("How many products do you want to add [kg]: ")
+				quantity = check_selected_unit(quantity, self[product - 1])
+			if quantity > self.warehouse[self[product - 1].name]:
+				print("Not enough products in stock!")
+				continue
+			self.cart[self[product - 1]] += quantity
+			self.warehouse[self[product - 1].name] -= quantity
+			self.show_shopping_list()
+			break
 	
 	def check_total_cost(self):
 		total_bill = 0
@@ -152,7 +211,7 @@ class ShoppingList(ShopWarehouse):
 			file.write("{:>118}\n".format("-" * 39))
 			file.write("Thank you for shopping and welcome again ! :)")
 			
-	def fill_up_warehouse(self, kilograms: int, pieces: int):
+	def fill_up_warehouse(self, kilograms: float, pieces: float):
 		for category in categories:
 			for number in range(len(food.loc[category])):
 				item = ShoppingItem.create_warehouse_item(category, number)

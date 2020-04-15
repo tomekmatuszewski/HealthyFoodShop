@@ -10,7 +10,7 @@ class Person:
 		self.age = int(age)
 		self.sex = sex
 		self.activity = float(activity)
-		self.bmi = round(caluculate_bmi(self.weight, self.height), 2)
+		self.bmi = round(calculate_bmi(self.weight, self.height), 2)
 		self.bmr = round(calculate_bmr(self.weight, self.height, self.age, self.sex), 2)
 		self.cmr = round(self.bmr * self.activity, 0)
 		self.daily_proteins = round((self.cmr * 0.20) / 4, 0)

@@ -3,7 +3,7 @@ class Meal:
 	def __init__(self, name):
 		self.name = name
 		self.products_list = {}
-	
+
 	def add_product(self, product, quantity):
 		if product not in self.products_list:
 			self.products_list[product] = 0
