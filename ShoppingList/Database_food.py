@@ -13,5 +13,7 @@ food['unit'] = food['unit'].astype('category')
 food['Number'] = food.groupby(by='Category').cumcount() + 1
 food = food.set_index(["Category", "Number"]).sort_index()
 
+categories = sorted(list(set(food.index.get_level_values(0))))
+
 if __name__ == '__main__':
 	print(food.info(memory_usage="deep"))

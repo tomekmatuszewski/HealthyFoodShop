@@ -1,111 +1,9 @@
 from datetime import datetime
+from Daily_Menu.Meal import Meal
+from Daily_Menu.utils import *
 
 
-class Product:
-	
-	def __init__(self, name, price, nutri_per_100, weight, calories, unit):
-		self.name = name
-		self.price = price
-		self.nutri_per_100 = nutri_per_100
-		self.weight = weight
-		self.calories = calories
-		self.unit = unit
-		self.grams = 0
-	
-	def get_name(self):
-		return self.name
-	
-	def get_price(self):
-		return self.price
-	
-	def get_nutritional_values(self):
-		return self.nutri_per_100
-	
-	def get_calories(self):
-		return self.calories
-	
-	def __str__(self):
-		return self.name
-	
-	def __lt__(self, other):
-		return self.calories < other.calories
-	
-	def __hash__(self):
-		return int(len(self.name) + self.price + self.calories)
-	
-	def __eq__(self, other):
-		return hash(self) == hash(other)
-
-
-class Meal(Product):
-	
-	def __init__(self, name):
-		self.name = name
-		self.products_list = {}
-	
-	def add_product(self, product, grams):
-		if product not in self.products_list:
-			self.products_list[product] = 0
-			self.products_list[product] += grams
-		else:
-			self.products_list[product] += grams
-	
-	def remove_product(self, product, grams):
-		self.products_list[product] -= grams
-		if self.products_list[product] <= 0:
-			del self.products_list[product]
-	
-	def remove_item(self, product):
-		del self.products_list[product]
-	
-	def show_products_in_meal(self):
-		counter = 1
-		print("{} :".format(self.name.upper()))
-		for k, v in self.products_list.items():
-			print('{}. {:41}\n\
-	----->      {:>14} {:7.1f} g\n\
-	----->      {:>15} {:7.2f} kcal\n\
-	----->      {:>15} {:7.2f} g\n\
-	----->      {:>15} {:7.2f} g\n\
-	----->      {:>15} {:7.2f} g'.format(counter, k.name + ':', "Product weight:", float(v),
-			                             "Calories:", float(k.calories) * float(v) / 100,
-			                             "Proteins:", float(k.nutri_per_100["Protein(g)"]) * float(v) / 100,
-			                             "Fats:", float(k.nutri_per_100["Fats(g)"]) * float(v) / 100,
-			                             "Carbohydrates:", float(k.nutri_per_100["Carbo(g)"]) * float(v) / 100))
-			counter += 1
-		print('-' * 56)
-	
-	def price_of_meal(self):
-		total_price = 0
-		for product in self.products_list.keys():
-			total_price += product.price
-		return total_price
-	
-	def get_meal_nutri(self):
-		sum_of_nutri = {"Protein(g)": 0, "Carbo(g)": 0, "Fats(g)": 0}
-		for product, grams in self.products_list.items():
-			sum_of_nutri["Protein(g)"] += float(product.nutri_per_100["Protein(g)"]) * round(grams / 100, 1)
-			sum_of_nutri["Carbo(g)"] += float(product.nutri_per_100["Carbo(g)"]) * round(grams / 100, 1)
-			sum_of_nutri["Fats(g)"] += float(product.nutri_per_100["Fats(g)"]) * round(grams / 100, 1)
-		return sum_of_nutri
-	
-	def get_meal_calories(self):
-		sum_of_calories = 0
-		for product, grams in self.products_list.items():
-			sum_of_calories += float(product.calories) * (grams / 100)
-		return round(sum_of_calories, 1)
-	
-	def get_meal_name(self):
-		return self.name
-	
-	def __getitem__(self, key):
-		return list(self.products_list.keys())[key]
-	
-	def __len__(self):
-		return len(list(self.products_list.keys()))
-
-
-class Menu(Meal):
+class Menu:
 	possible_set_meals = {1: ["Breakfast", "Dinner", "Supper"], 2: ["Breakfast", "Lunch", "Dinner", "Supper"],
 	                      3: ["Breakfast", "Lunch", "Dinner", "Afternoon snack", "Supper"],
 	                      4: ["Breakfast", "Lunch", "Dinner", "Afternoon snack", 'Post-workout meal', "Supper"]}
@@ -192,20 +90,22 @@ class Menu(Meal):
 			print("{}. {}".format(k, item))
 	
 	def print_menu(self, person):
-		file_path = r"Menu\Menus\Menu{}_{}.txt".format(datetime.now().strftime("%Y_%m_%d_%H-%M-%S"), person.username)
+		file_path = r"Daily_Menu\Menus\Menu{}_{}.txt".format(datetime.now().strftime("%Y_%m_%d_%H-%M-%S"),
+		                                                     person.username)
 		with open(file_path, 'a+') as file:
 			file.write("*HEALTHY FOOD SHOP COMPOSE YOUR DAILY MENU*\n")
 			file.write("-" * 65 + '\n')
 			file.write("Username: {}, Height: {} cm, Weight: {} kg, Age: {} y.\n".format(person.username,
-			                                                                           person.height, person.weight,
-			                                                                           person.age))
+			                                                                             person.height, person.weight,
+			                                                                             person.age))
 			file.write("-" * 65 + '\n')
 			file.write("|{:<50} {:7.2f} {:<4}|\n".format('Your max. daily caloric demand is:', person.cmr, 'kcal'))
 			file.write(
 				"|{:<53} {:7.2f} {}|\n".format('Your max. daily requirement for protein:', person.daily_proteins, 'g'))
 			file.write("|{:<53} {:7.2f} {}|\n".format('Your max. daily requirement for fats:', person.daily_fats, 'g'))
 			file.write(
-				"|{:<53} {:7.2f} {}|\n".format('Your max. daily requirement for carbohydrates:', person.daily_carbo, 'g'))
+				"|{:<53} {:7.2f} {}|\n".format('Your max. daily requirement for carbohydrates:', person.daily_carbo,
+				                               'g'))
 			file.write("-" * 65 + '\n')
 			for meal in self.menu_list:
 				counter = 1
@@ -217,12 +117,12 @@ class Menu(Meal):
 	----->      {:>15} {:7.2f} g\n\
 	----->      {:>15} {:7.2f} g\n\
 	----->      {:>15} {:7.2f} g\n'.format(counter, k.name + ':', "Product weight:", float(v),
-					                                     "Calories:", float(k.calories) * float(v) / 100,
-					                                     "Proteins:",
-					                                     float(k.nutri_per_100["Protein(g)"]) * float(v) / 100,
-					                                     "Fats:", float(k.nutri_per_100["Fats(g)"]) * float(v) / 100,
-					                                     "Carbohydrates:",
-					                                     float(k.nutri_per_100["Carbo(g)"]) * float(v) / 100))
+					                       "Calories:", float(k.calories) * float(v) / 100,
+					                       "Proteins:",
+					                       float(k.nutri_per_100["Protein(g)"]) * float(v) / 100,
+					                       "Fats:", float(k.nutri_per_100["Fats(g)"]) * float(v) / 100,
+					                       "Carbohydrates:",
+					                       float(k.nutri_per_100["Carbo(g)"]) * float(v) / 100))
 					counter += 1
 					file.write('-' * 65 + '\n')
 				file.write('Complete nutrition information for {}:\n\
@@ -230,10 +130,10 @@ class Menu(Meal):
 		----->      {:>15} {:7.2f} g\n\
 		----->      {:>15} {:7.2f} g\n\
 		----->      {:>15} {:7.2f} g\n'.format(meal.name.upper(), "Calories:", meal.get_meal_calories(),
-				                                         "Proteins:",
-				                                         meal.get_meal_nutri()["Protein(g)"], "Fats:",
-				                                         meal.get_meal_nutri()["Fats(g)"], "Carbohydrates:",
-				                                         meal.get_meal_nutri()["Carbo(g)"]))
+				                               "Proteins:",
+				                               meal.get_meal_nutri()["Protein(g)"], "Fats:",
+				                               meal.get_meal_nutri()["Fats(g)"], "Carbohydrates:",
+				                               meal.get_meal_nutri()["Carbo(g)"]))
 				file.write('-' * 65 + '\n')
 			file.write("Summary of values for the daily menu: \n")
 			file.write("Total {:<15}    {:7.2f} kcal\n".format('calories:', self.get_menu_calories()))
@@ -242,4 +142,20 @@ class Menu(Meal):
 			file.write("Total {:<15}    {:7.2f} g\n".format('carbohydrates:', self.get_menu_carbohydrates()))
 			file.write('-' * 65 + '\n')
 			file.write("ENJOY ! :)")
+	
+	def set_quantity_meals(self):
+		self.show_possible_set_meals()
+		your_menu = input("Select set of meals from list above: ")
+		your_menu = check_set_menu(your_menu, self.possible_set_meals.keys())
+		setattr(self, 'quantity_of_meals', len(self.possible_set_meals[int(your_menu)]))
+		for i in range(self.quantity_of_meals):
+			meal = Meal(self.possible_set_meals[int(your_menu)][i])
+			self.add_meal(meal)
+	
+	def __len__(self):
+		return len(self.menu_list)
+	
+	def __getitem__(self, key):
+		return self.menu_list[key]
+		
 

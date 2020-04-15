@@ -25,8 +25,8 @@ def check_index_number(index, list_index):
 
 def check_selected_unit(quantity, item):
 	if item.unit == "szt":
-		while not quantity.isdecimal():
-			print("The selected product - {} is sold in whole pieces. Please select a valid quantity".format(item.name))
+		while not quantity.isdecimal() or quantity == '0':
+			print("The selected product - {} is sold in whole pieces/packs. Please select a valid quantity".format(item.name))
 			quantity = input("Select quantity of products [szt]: ")
 			continue
 		return int(quantity)

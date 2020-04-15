@@ -1,28 +1,14 @@
 from ShoppingList.ShoppingItem import ShoppingItem
-from ShoppingList.Shop import ShoppingList,ShopWarehouse
-from ShoppingList.Database_food import food
+from ShoppingList.Shop import ShoppingList
+from ShoppingList.Database_food import food, categories
 from ShoppingList.utils import *
-import json
 
-categories = sorted(list(set(food.index.get_level_values(0))))
+# creating Healthy Food Shop !!!!
+new_shopping_cart = ShoppingList("Healthy Food Shop")
 
-# creating Main Warehouse for Healthy Food Shop !!!!
-MainWarehouse = ShopWarehouse("Healthy Food Shop Warehouse")
+# creating Items for Healthy Food Shop - filling up the Warehouse!!!!
+new_shopping_cart.fill_up_warehouse(10, 50)
 
-# creating Items for Healthy Food Shop !!!!
-
-for category in categories:
-	for number in range(len(food.loc[category])):
-		item = ShoppingItem(food.loc[(category,number+1), "Product"], food.loc[(category,number+1), "Price[PLN]"],{"Protein(g)": food.loc[(category,number+1), "Protein(g)"],
-		        "Fats(g)": food.loc[(category,number+1), "Fats(g)"], "Carbo(g)": food.loc[(category, number+1), "Carbo(g)"]},food.loc[(category,number+1), "Weight[g/ml]"],
-		                    food.loc[(category,number+1), "Kcal"], food.loc[(category,number+1),"unit"])
-		if item.unit == 'kg':
-			MainWarehouse.Warehouse[item.name] = 10
-		else:
-			MainWarehouse.Warehouse[item.name] = 50
-		
-# Creating Shopping List !!!!
-new_Shopping_Cart = ShoppingList()
 
 while True:
 	for item in range(len(categories)):
@@ -34,25 +20,23 @@ while True:
 	index_number = check_index_number(index_number, food.loc[categories[category-1]].loc[:, ["Product", "Price[PLN]"]])
 	if index_number == 0:
 		continue
-	item = ShoppingItem(food.loc[(categories[category-1], index_number), "Product"], food.loc[(categories[category-1],index_number), "Price[PLN]"],
-	                    {"Protein(g)": food.loc[(categories[category-1], index_number), "Protein(g)"],
-	                     "Fats(g)": food.loc[(categories[category-1], index_number), "Fats(g)"], "Carbo(g)": food.loc[(categories[category-1],index_number), "Carbo(g)"]},
-	                    food.loc[(categories[category-1], index_number), "Weight[g/ml]"], food.loc[(categories[category-1], index_number), "Kcal"], food.loc[(categories[category-1], index_number), "unit"])
-	print("{} : {} {} in Stock, price {} PLN/{}{}".format(item.name, MainWarehouse.Warehouse[item.name], item.unit, item.price, item.unit, ", " + str(item.weight) + "g/szt" if item.unit == 'szt' else ""))
+	item = ShoppingItem.create_shopping_item(category, index_number)
+	new_shopping_cart.show_availability(item)
 	if item.unit == "szt":
 		quantity = input("Select quantity of products [szt]: ")
 		quantity = check_selected_unit(quantity, item)
 	else:
 		quantity = input("Select quantity of products [kg]: ")
 		quantity = check_selected_unit(quantity, item)
-	new_Shopping_Cart.add_product(item, quantity)
+	new_shopping_cart.add_product(item, quantity)
 	print("Item added to Shopping Cart :)")
 	view_of_chart = input("Do you want to view the contents of the basket [Y/N]:")
 	view_of_chart = check_view_of_chart(view_of_chart)
 	if view_of_chart == 'Y':
-		new_Shopping_Cart.Show_Shopping_list()
+		new_shopping_cart.show_shopping_list()
 	while True:
-		action = input("Select next action [Continue :(C), Add (increase quantity of product): (A), Remove :(R), Finish (F)]: ")
+		action = input("Select next action [Continue :(C), Add (increase quantity of product): \
+		(A), Remove :(R), Finish (F)]: ")
 		action = check_action(action)
 		if action == 'C':
 			for item in range(len(categories)):
@@ -65,49 +49,41 @@ while True:
 			                                  food.loc[categories[category - 1]].loc[:, ["Product", "Price[PLN]"]])
 			if index_number == 0:
 				continue
-			item = ShoppingItem(food.loc[(categories[category - 1], index_number), "Product"],
-			                    food.loc[(categories[category - 1], index_number), "Price[PLN]"],
-			                    {"Protein(g)": food.loc[(categories[category - 1], index_number), "Protein(g)"],
-			                     "Fats(g)": food.loc[(categories[category - 1], index_number), "Fats(g)"],
-			                     "Carbo(g)": food.loc[(categories[category - 1], index_number), "Carbo(g)"]},
-			                    food.loc[(categories[category - 1], index_number), "Weight[g/ml]"],
-			                    food.loc[(categories[category - 1], index_number), "Kcal"],
-			                    food.loc[(categories[category - 1], index_number), "unit"])
-			print("{} : {} {} in Stock, price {} PLN/{}{}".format(item.name, MainWarehouse.Warehouse[item.name],
-			                                                      item.unit, item.price, item.unit, ", " + str(
-					item.weight) + "g/szt" if item.unit == 'szt' else ""))
+			item = ShoppingItem.create_shopping_item(category, index_number)
+			new_shopping_cart.show_availability(item)
+			
 			if item.unit == "szt":
 				quantity = input("Select quantity of products [szt]: ")
 				quantity = check_selected_unit(quantity, item)
 			else:
 				quantity = input("Select quantity of products [kg]: ")
 				quantity = check_selected_unit(quantity, item)
-			new_Shopping_Cart.add_product(item, quantity)
+			new_shopping_cart.add_product(item, quantity)
 			print("Item added to Shopping Cart :)")
 			view_of_chart = input("Do you want to view the contents of the basket [Y/N]:")
 			view_of_chart = check_view_of_chart(view_of_chart)
 			if view_of_chart == 'Y':
-				new_Shopping_Cart.Show_Shopping_list()
+				new_shopping_cart.show_shopping_list()
 			continue
 		elif action == 'R':
 			while True:
-				new_Shopping_Cart.Show_Shopping_list()
+				new_shopping_cart.show_shopping_list()
 				product = input("Select position from Shopping List [select 0 to Undo]: ")
-				product = check_product(product, new_Shopping_Cart)
+				product = check_product(product, new_shopping_cart)
 				if product == 0:
 					break
-				if new_Shopping_Cart[product-1].unit == "szt":
+				if new_shopping_cart[product-1].unit == "szt":
 					quantity = input("How many products do you want to remove [szt]: ")
-					quantity = check_selected_unit(quantity, new_Shopping_Cart[product-1])
+					quantity = check_selected_unit(quantity, new_shopping_cart[product-1])
 				else:
 					quantity = input("How many products do you want to remove [kg]: ")
-					quantity = check_selected_unit(quantity, new_Shopping_Cart[product - 1])
-				if quantity > new_Shopping_Cart.List[new_Shopping_Cart[product-1]]:
+					quantity = check_selected_unit(quantity, new_shopping_cart[product - 1])
+				if quantity > new_shopping_cart.cart[new_shopping_cart[product-1]]:
 					print("Number of products in the basket is less! Choose the correct number")
 					continue
-				new_Shopping_Cart.remove_product(new_Shopping_Cart[product-1], quantity)
-				new_Shopping_Cart.Show_Shopping_list()
-				if len(new_Shopping_Cart) == 0:
+				new_shopping_cart.remove_product(new_shopping_cart[product-1], quantity)
+				new_shopping_cart.show_shopping_list()
+				if len(new_shopping_cart) == 0:
 					print("Shopping Cart is Empty!!")
 					break
 				else:
@@ -115,39 +91,39 @@ while True:
 			continue
 		elif action == "A":
 			while True:
-				new_Shopping_Cart.Show_Shopping_list()
+				new_shopping_cart.show_shopping_list()
 				product = input("Select position from Shopping List [select 0 to Undo]: ")
-				product = check_product(product, new_Shopping_Cart)
+				product = check_product(product, new_shopping_cart)
 				if product == 0:
 					break
-				if new_Shopping_Cart[product-1].unit == 'szt':
+				if new_shopping_cart[product-1].unit == 'szt':
 					quantity = input("How many products do you want to add [szt]: ")
-					quantity = check_selected_unit(quantity, new_Shopping_Cart[product-1])
+					quantity = check_selected_unit(quantity, new_shopping_cart[product-1])
 				else:
 					quantity = input("How many products do you want to add [kg]: ")
-					quantity = check_selected_unit(quantity, new_Shopping_Cart[product - 1])
-				if quantity > new_Shopping_Cart.Warehouse[new_Shopping_Cart[product - 1].name]:
+					quantity = check_selected_unit(quantity, new_shopping_cart[product - 1])
+				if quantity > new_shopping_cart.warehouse[new_shopping_cart[product - 1].name]:
 					print("Not enough products in stock!")
 					continue
-				new_Shopping_Cart.increase_number_product(new_Shopping_Cart[product - 1], quantity)
-				new_Shopping_Cart.Show_Shopping_list()
+				new_shopping_cart.increase_number_product(new_shopping_cart[product - 1], quantity)
+				new_shopping_cart.show_shopping_list()
 				break
 			continue
 		elif action == 'F':
 			print("*" * 150)
-			new_Shopping_Cart.Show_Shopping_list()
+			new_shopping_cart.show_shopping_list()
 			print("*" * 150)
-			new_Shopping_Cart.get_nutritional_raport()
+			new_shopping_cart.get_nutritional_report()
 			break
 	break
 		
 print("*"*150)
 
-new_Shopping_Cart.Print_Bill()
+new_shopping_cart.print_bill()
 
 
 
-#print(MainWarehouse.Warehouse)
+#print(new_shopping_cart.warehouse)
 
 
 

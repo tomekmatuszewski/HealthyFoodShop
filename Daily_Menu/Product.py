@@ -1,7 +1,7 @@
 from ShoppingList.Database_food import food, categories
 
 
-class ShoppingItem:
+class Product:
 	
 	def __init__(self, name, price, nutri_per_100, weight, calories, unit):
 		self.name = name
@@ -10,7 +10,8 @@ class ShoppingItem:
 		self.weight = weight
 		self.calories = calories
 		self.unit = unit
-		
+		self.grams = 0
+	
 	def get_name(self):
 		return self.name
 	
@@ -31,48 +32,18 @@ class ShoppingItem:
 	
 	def __hash__(self):
 		return int(len(self.name) + self.price + self.calories)
-
+	
 	def __eq__(self, other):
 		return hash(self) == hash(other)
 	
 	@classmethod
-	def create_warehouse_item(cls, category, number):
-		product = food.loc[(category, number + 1), "Product"]
-		price = food.loc[(category, number + 1), "Price[PLN]"]
-		nutritional_data = {"Protein(g)": food.loc[(category, number + 1), "Protein(g)"],
-		                     "Fats(g)": food.loc[(category, number + 1), "Fats(g)"],
-		                     "Carbo(g)": food.loc[(category, number + 1), "Carbo(g)"]}
-		weight = food.loc[(category, number + 1), "Weight[g/ml]"]
-		calories = food.loc[(category, number + 1), "Kcal"]
-		unit = food.loc[(category, number + 1), "Kcal"], food.loc[(category, number + 1), "unit"]
-		return ShoppingItem(product, price, nutritional_data, weight, calories, unit)
-	
-	@classmethod
-	def create_shopping_item(cls, category, index_number):
+	def create_product(cls, index_number, category):
 		product = food.loc[(categories[category - 1], index_number), "Product"]
 		price = food.loc[(categories[category - 1], index_number), "Price[PLN]"]
 		nutritional_values = {"Protein(g)": food.loc[(categories[category - 1], index_number), "Protein(g)"],
-		 "Fats(g)": food.loc[(categories[category - 1], index_number), "Fats(g)"],
-		 "Carbo(g)": food.loc[(categories[category - 1], index_number), "Carbo(g)"]}
-		weight = food.loc[(categories[category - 1], index_number), "Weight[g/ml]"]
+		                      "Fats(g)": food.loc[(categories[category - 1], index_number), "Fats(g)"],
+		                      "Carbo(g)": food.loc[(categories[category - 1], index_number), "Carbo(g)"]}
+		weight = food.loc[(categories[category - 1], index_number), "Weight_pcs/pack[g]"]
 		calories = food.loc[(categories[category - 1], index_number), "Kcal"]
 		unit = food.loc[(categories[category - 1], index_number), "unit"]
-		return ShoppingItem(product, price, nutritional_values, weight, calories, unit)
-		
-		
-		
-		
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
+		return Product(product, price, nutritional_values, weight, calories, unit)
