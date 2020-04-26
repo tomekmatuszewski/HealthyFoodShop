@@ -19,4 +19,3 @@ categories = sorted(list(set(food.index.get_level_values(0))))
 
 if __name__ == '__main__':
 	food.info(memory_usage="deep")
-	print(path)
