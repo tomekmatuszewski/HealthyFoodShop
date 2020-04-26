@@ -78,7 +78,7 @@ class ShoppingList(ShopWarehouse):
 			print("Item added to Shopping Cart :)")
 			break
 	
-	def remove_product(self):
+	def remove_product(self, **kwargs):
 		while True:
 			self.show_shopping_list()
 			product = input("Select position from Shopping List [select 0 to Undo]: ")
